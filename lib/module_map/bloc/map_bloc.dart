@@ -26,7 +26,6 @@ class MapBloc extends Bloc<MapEvents, MapStates> {
   }
 
   Future<void> getCurrentPosition() async {
-
     this.add(MapLoadingEvent());
     service.getCurrentLocation().then((value) {
       if(value.isError)
@@ -36,14 +35,14 @@ class MapBloc extends Bloc<MapEvents, MapStates> {
     });
   }
 
-  getSubArea(){
+  getSubArea()async{
     this.add(MapLoadingEvent());
     service.getSubAreaPosition(null).then((value) {
       if(value == null)
         this.add(MapErrorEvent(error_message: 'Error Get Current Location '));
       else{
         MapData map =  MapData(latitude: 0.0, longitude: 0.0, name:'', message: '', isError: false);
-      map.subArea = value;
+        map.subArea = value;
         this.add(MapSuccessEvent(map,false));
       }
     });
@@ -55,7 +54,7 @@ class MapBloc extends Bloc<MapEvents, MapStates> {
     this.add(MapSuccessEvent(map,false));
   }
 
-  Future<void> getGesturePosition(LatLng latLng ,String description) async {
+  getGesturePosition(LatLng latLng ,String description)  {
     this.add(MapGestureSuccessEvent(MapData(latitude: latLng.latitude,longitude: latLng.longitude,name:description,message: 'success',isError: false)));
   }
 
@@ -164,4 +163,4 @@ class MapData{
 
 }
 
-MapBloc mapBloc = MapBloc();
+//MapBloc mapBloc = MapBloc();

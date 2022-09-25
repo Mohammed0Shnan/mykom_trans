@@ -13,8 +13,10 @@ class CreateOrderRequest {
   late String phone;
   late GeoJson destination;
   late String addressName;
+  late String buildingHomeNumber;
   late double orderValue;
   late String description;
+  late String ar_description;
   late String payment;
   late String status;
   late String? cardId;
@@ -32,10 +34,10 @@ class CreateOrderRequest {
      required this.phone,
      required this.payment,
      required this.products,
-  required this.numberOfMonth,
-  required this.deliveryTime,
-  required this.orderValue,
-  required this.startDate,
+     required this.numberOfMonth,
+     required this.deliveryTime,
+     required this.orderValue,
+     required this.startDate,
         required this.description,
         required this.addressName,
         required this.cardId,
@@ -44,6 +46,8 @@ class CreateOrderRequest {
         required this.vipOrder,
         required this.note,
         required this.orderSource
+        ,required this.ar_description,
+        required this.buildingHomeNumber
       });
 
   // CreateOrderRequest.fromJson(Map<String, dynamic> json) {
@@ -64,6 +68,7 @@ class CreateOrderRequest {
     data['status'] = this.status;
     data['payment'] = this.payment;
     data['description'] = this.description;
+    data['ar_description'] = this.ar_description;
     data['order_value'] = this.orderValue;
     data['address_name'] = this.addressName;
     data['customer_order_id'] =this.customerOrderID;
@@ -88,12 +93,14 @@ class CreateOrderRequest {
     data['start_date'] = this.startDate;
     data['customer_order_id'] = this.customerOrderID;
     data['phone'] = this.phone;
+    data['building_home_id'] = this.buildingHomeNumber;
 
     data['destination'] = this.destination.toJson();
     data['order_value'] = this.orderValue;
     data['payment'] = this.payment;
     data['address_name'] = this.addressName;
     data['description'] = this.description;
+    data['ar_description'] = this.ar_description;
     data['note'] = this.note;
     data['order_source'] = this.orderSource;
 

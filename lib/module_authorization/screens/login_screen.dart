@@ -1,14 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_kom/consts/colors.dart';
+import 'package:my_kom/consts/utils_const.dart';
 import 'package:my_kom/module_authorization/authorization_routes.dart';
 import 'package:my_kom/module_authorization/bloc/cubits.dart';
 import 'package:my_kom/module_authorization/bloc/login_bloc.dart';
 import 'package:my_kom/module_authorization/enums/user_role.dart';
 import 'package:my_kom/module_authorization/screens/reset_password_screen.dart';
-import 'package:my_kom/module_authorization/screens/widgets/top_snack_bar_widgets.dart';
 import 'package:my_kom/module_authorization/service/auth_service.dart';
 import 'package:my_kom/module_home/navigator_routes.dart';
 import 'package:my_kom/utils/size_configration/size_config.dart';
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Column(
               children: [
-                SizedBox(height: SizeConfig.screenHeight * 0.15,),
+                SizedBox(height: SizeConfig.screenHeight * 0.1,),
                 Container(
                   width: SizeConfig.screenWidth * 0.6,
                   child: Image.asset('assets/new_logo.png'),
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     key: _LoginFormKey,
                     child: ListView(
                       children: [
-                        SizedBox(height: SizeConfig.heightMulti * 3,),
+
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -104,17 +105,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Text(S.of(context)!.email,style:GoogleFonts.lato(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
-                                      fontSize: SizeConfig.titleSize * 2
+                                      fontSize: 15
                                   ))),
                               subtitle: SizedBox(
                                 child: TextFormField(
-                                  style: TextStyle(fontSize: 16,
+                                  style: TextStyle(fontSize: 15,
                                   height: 1
                                   ),
                                   keyboardType: TextInputType.emailAddress,
                                   controller: _LoginEmailController,
                                   decoration: InputDecoration(
                                       isDense: true,
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
                                       border:OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 2,
@@ -153,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text( S.of(context)!.password,style:GoogleFonts.lato(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
-                                    fontSize: SizeConfig.titleSize * 2
+                                    fontSize:15
                                 ))),
                             subtitle: BlocBuilder<PasswordHiddinCubit,
                                 PasswordHiddinCubitState>(
@@ -164,21 +166,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                     controller: _LoginPasswordController,
                                     style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         height: 1
                                     ),
                                     decoration: InputDecoration(
                                         isDense: true,
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 8,vertical:12),
+                                        contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
                                         errorStyle: GoogleFonts.lato(
                                           color: Colors.red.shade700,
                                           fontWeight: FontWeight.w800,
                                         ),
-
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 2,
+                                          minHeight: 30,
+                                        ),
                                         suffixIcon: SizedBox(
-                                          height: 10,
+                                          height: 4,
                                           child: IconButton(
-                                              onPressed: () {
+                                              onPressed: (){
                                                 cubit.changeState();
                                               },
                                               icon: state ==
@@ -233,49 +238,58 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.only(
-                                  right: 2.345 * SizeConfig.heightMulti),
+                                  right: SizeConfig.widhtMulti * 4),
                               child: Text( S.of(context)!.forgotPassword,
                                   style: GoogleFonts.lato(
                                     fontWeight: FontWeight.w800,
                                     color: Colors.black54,
-                                    fontSize: SizeConfig.titleSize * 1.5,
+                                    fontSize: 12,
                                   )),
                             ),
                           ),
                         ),
                         SizedBox(
-                          height:SizeConfig.heightMulti *1.7,
+                          height:20,
                         ),
                         BlocConsumer<LoginBloc, LoginStates>(
                             bloc: widget._loginBloc,
                             listener: (context, LoginStates state)async {
                               if(state is LoginLoadingState)
                                 EasyLoading.show();
-
                              else if (state is LoginSuccessState) {
-                               EasyLoading.showSuccess( state.message);
-                               // snackBarSuccessWidget(context, state.message);
+                                EasyLoading.showSuccess(state.message);
+                                //snackBarSuccessWidget(context, state.message);
                                 UserRole? role = await AuthService().userRole;
                                 if(role != null){
+                                  // Navigator.of(context).pushAndRemoveUntil(
+                                  //   CupertinoPageRoute(
+                                  //     builder: (BuildContext context) {
+                                  //       return ();
+                                  //     },
+                                  //   ),
+                                  //       (_) => false,
+                                  // );
+                                  //
+                                  //
+                                  UtilsConst.isInit = true;
                                   Navigator.pushNamedAndRemoveUntil(
-                                      context, NavigatorRoutes.NAVIGATOR_SCREEN,(route)=> false);
+                                      context, NavigatorRoutes.NAVIGATOR_SCREEN,(route)=> false,);
                                 }
 
                               } else if (state is LoginErrorState) {
-                               EasyLoading.showError( state.message);
-                               // snackBarErrorWidget(context, state.message);
+                                EasyLoading.showError( state.message);
+                                //snackBarErrorWidget(context, state.message);
                               }
                             },
                             builder: (context, LoginStates state) {
 
                                 return ListTile(
                                   title: Container(
-                                    height: 55,
+                                    height: 35,
                                     margin: EdgeInsets.symmetric(horizontal: 20),
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10)),
-                                    padding: EdgeInsets.symmetric(vertical: 10),
                                     child: ClipRRect(
                                       clipBehavior: Clip.antiAlias,
                                       borderRadius: BorderRadius.circular(10),
@@ -299,8 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: Text( S.of(context)!.login,
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize:
-                                                  SizeConfig.titleSize * 2.3,
+                                                  fontSize:17,
                                                   fontWeight: FontWeight.w700))),
                                     ),
                                   ),
@@ -316,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style:  GoogleFonts.lato(
                                   fontWeight: FontWeight.w800,
                                   color: Colors.black45,
-                                  fontSize: SizeConfig.titleSize * 1.5,
+                                  fontSize: 16,
                                 ),
                               ),
                               GestureDetector(
@@ -329,7 +342,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 child: Text( S.of(context)!.createAccount,
                                     style:  GoogleFonts.lato(
-                                        fontSize: SizeConfig.titleSize * 1.8,
+                                        fontSize: 16.5,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue                          )
 

@@ -27,19 +27,19 @@ class FireNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> init(BuildContext context) async {
-   NotificationSettings _settings =  await _fcm.requestPermission(
+     await _fcm.requestPermission(
       alert: true,
       badge: true,
       provisional: false,
       sound: true,
     );
 
-
     FirebaseMessaging.instance.subscribeToTopic('advertisements');
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+
     );
     _flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
@@ -64,7 +64,6 @@ class FireNotificationService {
       )
       );
       if(Platform.isIOS){
-
         showSimpleNotification(Text( message.title!)
         ,subtitle: Text(message.body!),
           duration: Duration(seconds: 2),

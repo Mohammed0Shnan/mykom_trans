@@ -13,7 +13,7 @@ class MessageLookup extends MessageLookupByLibrary {
     /// login page
     "login": MessageLookupByLibrary.simpleMessage("دخول"),
     "email": MessageLookupByLibrary.simpleMessage("الايميل"),
-    "password": MessageLookupByLibrary.simpleMessage("كلمة السر"),
+    "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "createAccount": MessageLookupByLibrary.simpleMessage("انشاء حساب"),
     "confirmPassword": MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
     "signInToContinue": MessageLookupByLibrary.simpleMessage("سجل دخول للمتابعة"),
@@ -41,6 +41,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "codeIsRequired": MessageLookupByLibrary.simpleMessage("رجاءا ادخل رمز التحقق"),
     "code": MessageLookupByLibrary.simpleMessage("رمز التحقق"),
     "newPassword": MessageLookupByLibrary.simpleMessage("كلمة السر الجديدة"),
+    "registerAddressSuccessMessage": MessageLookupByLibrary.simpleMessage("يمكنك تغيير عنوانك الرئيسي من الصفحة الشخصية"),
+    "registerAddressErrorMessage": MessageLookupByLibrary.simpleMessage("فشل تحديد موقعك ، يرجى إعادة تحديده"),
+    "buildingOrHomeNumber": MessageLookupByLibrary.simpleMessage("رقم البناء أو المنزل"),
+    "buildingOrHomeNumberHint": MessageLookupByLibrary.simpleMessage("أدخل أسم البناء أو رقم المنزل"),
 
     /// About Pages
     "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
@@ -50,11 +54,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "subTitlePageOne": MessageLookupByLibrary.simpleMessage("في ماي كوم تقدر تلاقي الخيار الذي يناسبك"),
     "subTitlePageTow": MessageLookupByLibrary.simpleMessage("طريقة الدفع في ماي كوم متعددة  ,ادفع بالطريقة الي تناسبك"),
     "subTitlePageThree": MessageLookupByLibrary.simpleMessage("بينما كل التطبيقات تحقق ارباحهامن رسوم التوصيل تطبيقنا يوصلك مجانا"),
+    "deleteMyAccount": MessageLookupByLibrary.simpleMessage("حذف الحساب"),
+    "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
+    "required": MessageLookupByLibrary.simpleMessage("مطلوب"),
+    "requiredCartFieldMessage": MessageLookupByLibrary.simpleMessage("الرجاء إدخال الحقول المطلوبة"),
+
 
     /// Home Page
     "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
     "orders": MessageLookupByLibrary.simpleMessage("الطلبات"),
-    "profile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
+    "profile": MessageLookupByLibrary.simpleMessage("حسابي"),
     "ship": MessageLookupByLibrary.simpleMessage("السلة"),
     "more": MessageLookupByLibrary.simpleMessage("المزيد"),
     "deliveryTo": MessageLookupByLibrary.simpleMessage("التوصيل الى"),
@@ -63,7 +72,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "notLoggedIN": MessageLookupByLibrary.simpleMessage("انت غير مشترك في \n MyKom"),
     "refresh": MessageLookupByLibrary.simpleMessage("تحديث"),
     "determineLocation": MessageLookupByLibrary.simpleMessage("تعذر تحديد الموقع ، حدد الموقع يدويًا"),
-
+    "recommended": MessageLookupByLibrary.simpleMessage("موصى به"),
+    "companies": MessageLookupByLibrary.simpleMessage("الشركات"),
+    "all": MessageLookupByLibrary.simpleMessage("الكل"),
 
     /// Setting Page
     "settings": MessageLookupByLibrary.simpleMessage("الاعدادات"),
@@ -137,8 +148,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailAndPhone": MessageLookupByLibrary.simpleMessage("الايميل والهاتف"),
     "myAddress": MessageLookupByLibrary.simpleMessage("عنواني"),
     "myInformation": MessageLookupByLibrary.simpleMessage("معلوماتي الشخصية"),
-    "myProfile": MessageLookupByLibrary.simpleMessage("ملفي\nالشخصي"),
-
+    "myProfile": MessageLookupByLibrary.simpleMessage("الحساب\nالشخصي"),
+    "titleDeleteAccountAlert": MessageLookupByLibrary.simpleMessage("هل تريد حذف حسابك؟"),
+    "subTitleDeleteAccountAlert": MessageLookupByLibrary.simpleMessage("ملاحظة: عندما تحذف حسابك ، ستفقد بياناتك الشخصية على تطبيق مايكوم."),
+    "deleteAccountAlertButton": MessageLookupByLibrary.simpleMessage("حذف"),
+    "cancelAccountDeleteAlertButton": MessageLookupByLibrary.simpleMessage("الغاء"),
+    "successDeleteAccount": MessageLookupByLibrary.simpleMessage("تم حذف الحساب بنجاح"),
+    "errorDeleteAccount": MessageLookupByLibrary.simpleMessage("حدث خطأ !"),
     /// Orders Page
     "currentOrders": MessageLookupByLibrary.simpleMessage("الطلبات الحالية"),
     "previousOrders": MessageLookupByLibrary.simpleMessage("الطلبات السابقة"),
@@ -147,14 +163,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "orderDetail": MessageLookupByLibrary.simpleMessage("تفاصيل"),
     "reOrder": MessageLookupByLibrary.simpleMessage("اعادة الطلب"),
     "noDataToDisplay": MessageLookupByLibrary.simpleMessage("لا يوجد بيانات لعرضها"),
-    "deleteAccount": MessageLookupByLibrary.simpleMessage("حذف الحساب"),
-    "titleDeleteAccount": MessageLookupByLibrary.simpleMessage("هل تريد حذف حسابك؟"),
-    "subTitleDeleteAccount": MessageLookupByLibrary.simpleMessage("ملاحظة: عندما تحذف حسابك ، ستفقد بياناتك الشخصية على تطبيق MyKom."),
-    "successDeleteAccount": MessageLookupByLibrary.simpleMessage("تم حذف الحساب بنجاح"),
-    "errorDeleteAccount": MessageLookupByLibrary.simpleMessage("حدث خطأ !"),
-    "cancel": MessageLookupByLibrary.simpleMessage("الغاء"),
-    "delete": MessageLookupByLibrary.simpleMessage("حذف"),
-
 
 
     /// Ship Pages
@@ -186,8 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "extraCharge": MessageLookupByLibrary.simpleMessage("الرسوم الاضافية"),
     "orderValue": MessageLookupByLibrary.simpleMessage("قيمة الطلب"),
     "paymentMethods": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
-    "cashMoney": MessageLookupByLibrary.simpleMessage("دفع نقداً"),
-    "creditCard": MessageLookupByLibrary.simpleMessage("دفع باستخدام البطاقة"),
+    "cashMoney": MessageLookupByLibrary.simpleMessage("الدفع نقدا"),
+    "creditCard": MessageLookupByLibrary.simpleMessage("الدفع باسخدام البطاقة"),
     "paymentMethodAlert": MessageLookupByLibrary.simpleMessage("رجاءا اختر طريقة الدفع"),
     "destinationAlert": MessageLookupByLibrary.simpleMessage("قم باختيار موقع صحيح ينتمي للمناطق المخدمة "),
     "orderConfirmation": MessageLookupByLibrary.simpleMessage("تأكيد"),
@@ -199,11 +207,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
     "searchForYourProducts": MessageLookupByLibrary.simpleMessage("ابحث عن منتجات معينة"),
     "added": MessageLookupByLibrary.simpleMessage("أضف"),
-    "seeTheCart": MessageLookupByLibrary.simpleMessage("شوف العربة"),
-    "addToCart": MessageLookupByLibrary.simpleMessage(" أضف الى العربة"),
+    "seeTheCart": MessageLookupByLibrary.simpleMessage("اذهب الى السلة"),
+    "addToCart": MessageLookupByLibrary.simpleMessage(" أضف الى السلة"),
     "description": MessageLookupByLibrary.simpleMessage("الوصف"),
-    "selectTheNumberOfItemsRequired": MessageLookupByLibrary.simpleMessage("قم بتحديدعدد المنتجات ثم أضف"),
-    "itemsHaveBeenAdded": MessageLookupByLibrary.simpleMessage("تم أضافة المنتجات الى العربة "),
+    "selectTheNumberOfItemsRequired": MessageLookupByLibrary.simpleMessage("قم بتحديد عدد المنتجات ثم أضف"),
+    "itemsHaveBeenAdded": MessageLookupByLibrary.simpleMessage("تم أضافة المنتجات الى السلة"),
     "rival": MessageLookupByLibrary.simpleMessage("خصم"),
 
 
@@ -269,6 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "validPhone": MessageLookupByLibrary.simpleMessage("ادخل رقم هاتف صحيح"),
     "shortPassword": MessageLookupByLibrary.simpleMessage("كلمة المرمر قصرة , على الأقل 5 محارف"),
     "confirmPasswordRequired": MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرمر مطلوب"),
+    "numberOfItemsRequired": MessageLookupByLibrary.simpleMessage("حدد عدد العناصر المطلوب"),
 
 
 

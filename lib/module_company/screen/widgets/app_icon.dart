@@ -9,7 +9,7 @@ class IconWidget  extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double size = SizeConfig.heightMulti *5;
+    double size = 40.0;
            return   Container(
                alignment: Alignment.center,
                width: size,

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2+8
+version: 1.0.4+14
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -26,10 +26,10 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,7 +44,7 @@ dependencies:
   flutter_local_notifications: ^7.0.0
   overlay_support: ^2.0.1
   # Path
-#  path: ^1.8.0
+  path: ^1.8.0
 
   page_view_indicators: ^2.0.0
   # Charts
@@ -52,15 +52,16 @@ dependencies:
 
 
   # Image Network
-#  image_picker: ^0.8.5+3
+  # image_picker: ^0.8.5+3
   # flutter_image_compress: ^1.1.0
   # image_cropper: ^1.4.1
   cached_network_image: ^3.2.0
 
 
 
-  # Payment
+#  # Payment
 #  flutter_credit_card: ^3.0.1
+#  flutter_stripe: ^4.0.0
 #  stripe_payment: ^1.1.4
 #  webview_flutter: ^3.0.4
 #  flutter_braintree: ^2.3.1
@@ -75,13 +76,21 @@ dependencies:
   timeago: ^3.2.2
 
   # Network Agent
-  dio: ^4.0.6
-  http: ^0.13.4
-  http_auth:
+#  dio: ^4.0.6
+#  http: ^0.13.4
+#  http_auth:
 
 
+  # Bottom Nav Bar
+#  persistent_bottom_nav_bar: ^4.0.2
+#  animated_bottom_navigation_bar: ^1.1.0
+  convex_bottom_bar: ^3.0.0
   # Connectivity Plus (check internet)
   #connectivity_plus: ^2.0.2
+
+
+  # Switch
+  flutter_switch: ^0.3.2
 
   # Local Storage
   shared_preferences: ^2.0.6
@@ -126,7 +135,7 @@ dependencies:
   #latlong2: ^0.8.1
 
   # Picker
-#  flutter_datetime_picker: ^1.5.1
+  flutter_datetime_picker: ^1.5.1
 
   # Fonts
 
@@ -154,29 +163,37 @@ dependencies:
   badges: ^2.0.2
   # flutter_custom_clippers: ^2.0.0
   # flutter_spinkit: ^5.1.0
+
+  # Loading Widget
   flutter_easyloading: ^3.0.5
+  load: ^1.0.0
+
   hexcolor: ^2.0.7
 
   # TIME LINES
   timelines: ^0.1.0
+
+  # Splash Screen
   flutter_native_splash: ^2.2.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  change_app_package_name: ^1.1.0
-#  flutter_launcher_name: "^0.0.1"
-  flutter_launcher_icons: ^0.9.2
+
+#  flutter_launcher_name: any
+
+#flutter_launcher_name:
+#  name: "MyKom"
+
+  flutter_launcher_icons: ^0.9.0
+
 flutter_icons:
   android: true
   ios: true
-  remove_alpha_ios: true
-  image_path: "assets/app_icon.jpg"
+  image_path: "assets/app_icon.png"
 
 flutter_native_splash:
   color: "#469e7c"
-flutter_launcher_name:
-  name: "MyKom"
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -194,7 +211,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
@@ -205,7 +225,9 @@ flutter:
     - assets/new_oval_logo.png
     - assets/icons/
     - assets/icons/in_store.svg
-
+    - assets/delevery_address_mark.jpg
+    - assets/icons/address_delivery_icon.png
+    - assets/water_section_icon.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -219,12 +241,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

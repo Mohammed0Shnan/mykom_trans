@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:typed_data' as types;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_kom/consts/colors.dart';
 import 'package:my_kom/module_localization/presistance/localization_preferences_helper.dart';
+import 'package:my_kom/module_map/bloc/location_informatiion_loaded_cubit.dart';
 import 'package:my_kom/module_map/bloc/map_bloc.dart';
 import 'package:my_kom/module_map/models/address_model.dart';
 import 'package:my_kom/utils/size_configration/size_config.dart';
@@ -14,6 +18,8 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:my_kom/generated/l10n.dart';
+
+import '../bloc/location_informatiion_loaded_cubit.dart';
 
 class MapScreen extends StatefulWidget {
   final LocalizationPreferencesHelper _preferencesHelper =
@@ -29,7 +35,8 @@ const kGoogleApiKey = 'AIzaSyD2mHkT8_abpMD9LJl307Qhk7GHWuKqMJw';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _MapScreenState extends State<MapScreen> {
-  late final MapBloc mapBloc ;
+  late final MapBloc _mapBloc ;
+  late final LocationInformationLoadCubit _informationLoadCubit;
    late GoogleMapController _controller ;
 
   final CameraPosition _kGooglePlex = CameraPosition(
@@ -39,42 +46,58 @@ class _MapScreenState extends State<MapScreen> {
   String language ='en';
   @override
   void initState() {
-    mapBloc = MapBloc();
+    _mapBloc = MapBloc();
+
+    _informationLoadCubit = LocationInformationLoadCubit();
+    _getMarker();
     widget._preferencesHelper.getLanguage().then((value) {
-      language = value!;
+      if(value != null)
+      language = value;
     });
 
     super.initState();
     _searchController = TextEditingController(text: '');
-    mapBloc.getCurrentPosition();
+    _mapBloc.getCurrentPosition();
   }
   @override
   void dispose() {
+
+    _informationLoadCubit.close();
     _controller.dispose();
+    _searchController.dispose();
+    if(!_mapBloc.isClosed)_mapBloc.close();
     super.dispose();
   }
-  final Set<Marker> _markers = Set<Marker>();
- // late GoogleMapController googleMapController;
+ //  final Set<Marker> _markers = Set<Marker>();
+ // // late GoogleMapController googleMapController;
   Map<String, dynamic>? location_from_search = null;
+
+  /// Get Center Parameters
+  Set<Circle> circleSets = {};
+  LatLng? onCameraMoveEndLatLang;
+  bool isPinMarkerVisible = false;
+  types.Uint8List picUpMarker = types.Uint8List.fromList([]);
   final Mode _mode = Mode.overlay;
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       register = ModalRoute.of(context)!.settings.arguments as bool;
-      setState((){});
+     // setState((){});
     });
     return BlocConsumer<MapBloc, MapStates>(
-      bloc: mapBloc,
+      bloc: _mapBloc,
       listener: (context, state) async {
         if (state is MapSuccessState) {
+
           LatLng latLng = LatLng(state.data.latitude, state.data.longitude);
           _searchController.text = state.data.name;
-          mapBloc.getGesturePosition(latLng, '').then((value) {
-            location_from_search = null;
-            _move(latLng);
-            getDetailFromLocation(latLng);
-          });
+          _mapBloc.getGesturePosition(latLng , '');
+          // location_from_search = null;
+           _move(latLng);
+          // await getDetailFromLocation(latLng);
+          // _informationLoadCubit.emitLoadedState();
         } else if (state is MapErrorState) {
+          _informationLoadCubit.emitErrorState();
           showTopSnackBar(
             context,
             CustomSnackBar.error(
@@ -91,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
                 latitude: latLan.latitude,
                 longitude: latLan.longitude,
                 geoData: {});
-            String subArea = await mapBloc.service
+            String subArea = await _mapBloc.service
                 .getSubArea(LatLng(latLan.latitude, latLan.longitude));
             addressModel.subArea = subArea;
           } else {
@@ -100,16 +123,28 @@ class _MapScreenState extends State<MapScreen> {
                 latitude: state.latitude,
                 longitude: state.longitude,
                 geoData: {});
-            String subArea = await mapBloc.service
+            String subArea = await _mapBloc.service
                 .getSubArea(LatLng(state.latitude, state.longitude));
             addressModel.subArea = subArea;
           }
-        Navigator.pop(context, addressModel);
+
+          ///for map error
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => Center(child: Container(
+            height: 30,
+            width: 30,
+            child: (Platform.isIOS)?CupertinoActivityIndicator():CircularProgressIndicator(color: ColorsConst.mainColor,),
+          ),)));
+          await Future.delayed(Duration(seconds: 1));
+
+          /// fetch data from map
+          Navigator.of(context)..pop()..pop(addressModel);
+          _mapBloc.close();
         } else if (state is MapGestureSuccessState) {
           location_from_search = null;
           LatLng latLng = LatLng(state.data.latitude, state.data.longitude);
-          getDetailFromLocation(latLng);
-          mapBloc.service.getSubArea(latLng);
+         await  getDetailFromLocation(latLng);
+          _informationLoadCubit.emitLoadedState();
+          // mapBloc.service.getSubArea(latLng);
         }
       },
       builder: (context, state) {
@@ -117,22 +152,22 @@ class _MapScreenState extends State<MapScreen> {
             body: SafeArea(
               child: Stack(
                 children: [
+
                   Container(
                     height: SizeConfig.screenHeight,
                     width: SizeConfig.screenWidth,
                     child: GoogleMap(
-                      onTap: (v) {
-                        print(v);
-                        LatLng latLng = LatLng(v.latitude, v.longitude);
-                        mapBloc.getGesturePosition(latLng, '');
-                      },
-                      minMaxZoomPreference: MinMaxZoomPreference(0 , 16),
-                      markers: _markers,
+                      // onTap: (v) {
+                      //   print(v);
+                      //   LatLng latLng = LatLng(v.latitude, v.longitude);
+                      //   mapBloc.getGesturePosition(latLng, '');
+                      // },
+                     // minMaxZoomPreference: MinMaxZoomPreference(0 , 16),
+                     // markers: _markers,
                       myLocationButtonEnabled: false,
                       myLocationEnabled: true,
                       zoomGesturesEnabled: true,
-                      tiltGesturesEnabled: true,
-                      zoomControlsEnabled: true,
+                      zoomControlsEnabled: false,
                       scrollGesturesEnabled: true,
                       rotateGesturesEnabled: true,
                       mapType: MapType.normal,
@@ -140,19 +175,37 @@ class _MapScreenState extends State<MapScreen> {
                       onMapCreated: (GoogleMapController controller) {
                         _controller =controller;
                       },
+                     // circles: circleSets,
+                      onCameraIdle: _getPinnedAddress,
+                      onCameraMove: (position) async{
+                        if(isPinMarkerVisible){
+                          onCameraMoveEndLatLang =  await pickLocationOnMap(position);
+                        }
+                      },
 
                     ),
                   ),
-                  if (state is MapLoadingState)
-                    Positioned.fill(
-                      child: Container(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: ColorsConst.mainColor,
-                          ),
-                        ),
-                      ),
+                  Center(
+                    child: Visibility(
+                      visible: isPinMarkerVisible,
+                    child: Image.memory(picUpMarker,height: 45,width: 45,alignment: Alignment.center,fit: BoxFit.cover,color: Colors.red,
+                    frameBuilder: (context , child ,frame , wasSyncLoaded){
+                      return Transform.translate(offset:  const Offset(0, -10) ,child: child,);
+                    },
                     ),
+                    ),
+                  ),
+
+                  // if (state is MapLoadingState)
+                  //   Positioned.fill(
+                  //     child: Container(
+                  //       child: Center(
+                  //         child: CupertinoActivityIndicator(
+                  //           color: ColorsConst.mainColor,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
                   Positioned(
                       top: 10,
                       left: 10,
@@ -163,7 +216,7 @@ class _MapScreenState extends State<MapScreen> {
                             child: GestureDetector(
                               onTap: _handlePressButton,
                               child: Container(
-                                  height: SizeConfig.heightMulti * 5,
+                                  height: 40,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -179,9 +232,18 @@ class _MapScreenState extends State<MapScreen> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                                        child: Icon(
-                                          Icons.location_on,
-                                          color: ColorsConst.mainColor,
+                                        child: BlocBuilder<LocationInformationLoadCubit,LocationInformationLoadCubitState>(
+                                          bloc: _informationLoadCubit,
+                                          builder: (context,locationInfoState) {
+                                            if(locationInfoState == LocationInformationLoadCubitState.LOADING)
+                                              return CupertinoActivityIndicator();
+                                            else if( locationInfoState == LocationInformationLoadCubitState.ERROR)
+                                              return Icon(Icons.location_off , color: Colors.red,);
+                                            return Icon(
+                                              Icons.location_on,
+                                              color: ColorsConst.mainColor,
+                                            );
+                                          }
                                         ),
                                       ),
                                       Expanded(
@@ -197,11 +259,11 @@ class _MapScreenState extends State<MapScreen> {
                                               style:_searchController.text == ''? GoogleFonts.lato(
                                                   color: Colors.black38,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: SizeConfig.titleSize * 1.8)
+                                                  fontSize: 14)
                                               :GoogleFonts.lato(
                                                   color: Colors.black87,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: SizeConfig.titleSize * 1.3),
+                                                  fontSize: 12),
                                             )),
                                       ),
                                       SizedBox(
@@ -221,7 +283,7 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       )),
                   Positioned(
-                      bottom: 8,
+                      bottom: 15,
                       left: 15,
                       right: 15,
                       child: Material(
@@ -229,23 +291,22 @@ class _MapScreenState extends State<MapScreen> {
                         color: ColorsConst.mainColor,
                         elevation: 10,
                         child: Container(
-                          height: SizeConfig.heightMulti * 5,
+                          height: 35.0,
                           child: TextButton(
+
                             onPressed: () {
                               if (location_from_search != null) {
-                                print('******  address from google map search  ******');
                                 LatLng latLan =
                                     location_from_search!['po'] as LatLng;
                                 String n =
                                     location_from_search!['name'] as String;
 
-                                mapBloc.saveLocation(latLan, n);
+                              _mapBloc.saveLocation(latLan, n);
                               } else {
-                                print('******  address from gesture  ******');
                                 if (state is MapGestureSuccessState) {
                                   LatLng latLng = LatLng(state.data.latitude,
                                       state.data.longitude);
-                                  mapBloc.saveLocation(latLng, state.data.name);
+                                  _mapBloc.saveLocation(latLng, state.data.name);
                                 } else {
                                   showTopSnackBar(
                                     context,
@@ -259,16 +320,18 @@ class _MapScreenState extends State<MapScreen> {
                                 }
                               }
                             },
-                            child: Text(
-                              register == null
-                                  ? ''
-                                  : register!
-                                      ? S.of(context)!.mapSave
-                                      : S.of(context)!.mapDelivery,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: SizeConfig.titleSize * 2,
-                                  fontWeight: FontWeight.w500),
+                            child: Center(
+                              child: Text(
+                                register == null
+                                    ? ''
+                                    : register!
+                                        ? S.of(context)!.mapSave
+                                        : S.of(context)!.mapDelivery,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),
@@ -280,7 +343,7 @@ class _MapScreenState extends State<MapScreen> {
               margin: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
               child: FloatingActionButton(
                 onPressed: () {
-                  mapBloc.getCurrentPosition();
+                  _mapBloc.getCurrentPosition();
                 },
                 child: Icon(Icons.my_location),
               ),
@@ -291,29 +354,29 @@ class _MapScreenState extends State<MapScreen> {
 
   getDetailFromLocation(LatLng latLng) async {
     LocationInformation _currentAddress =
-        await mapBloc.service.getPositionDetail(latLng);
-    Marker marker = Marker(
-        markerId: MarkerId('_current_position'),
-        infoWindow: InfoWindow(
-          title: _currentAddress.title,
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-        position: latLng);
+        await _mapBloc.service.getPositionDetail(latLng);
+    // Marker marker = Marker(
+    //     markerId: MarkerId('_current_position'),
+    //     infoWindow: InfoWindow(
+    //       title: _currentAddress.title,
+    //     ),
+    //     icon: BitmapDescriptor.defaultMarker,
+    //     position: latLng);
     _searchController.text = "${_currentAddress.subTitle}";
-    _setMarker(marker);
+    // _setMarker(marker);
   }
-
+  //
   Future<void> _move(LatLng latLng) async {
     CameraPosition cameraPosition = CameraPosition(target: latLng, zoom: 16.0);
     final GoogleMapController controller = _controller; // await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
-  _setMarker(Marker marker) {
-    _markers.clear();
-    _markers.add(marker);
-    setState(() {});
-  }
+  // _setMarker(Marker marker) {
+  //   _markers.clear();
+  //   _markers.add(marker);
+  //   setState(() {});
+  // }
 
   /// search
 
@@ -355,13 +418,45 @@ class _MapScreenState extends State<MapScreen> {
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
     location_from_search = {'po': LatLng(lat, lng), 'name': detail.result.name};
-    _setMarker(Marker(
-        markerId: const MarkerId("0"),
-        position: LatLng(lat, lng),
-        infoWindow: InfoWindow(title: detail.result.name)));
+    // _setMarker(Marker(
+    //     markerId: const MarkerId("0"),
+    //     position: LatLng(lat, lng),
+    //     infoWindow: InfoWindow(title: detail.result.name)));
 
     final GoogleMapController controller =  _controller; // await _controller.future;
     controller
         .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng),16.0));
   }
+
+
+
+ Future<LatLng> pickLocationOnMap(CameraPosition _onCameraMovePosition) async {
+    LatLng onCameraMovePosition = _onCameraMovePosition.target;
+    // Circle pinCircle = Circle(circleId: const CircleId('0',
+    // ),
+    // radius: 1,
+    //   zIndex: 1,
+    //   strokeColor: Colors.black54,
+    //   center: onCameraMovePosition,
+    //   fillColor: Colors.blue.withOpacity(0.7),
+    //
+    // );
+    //circleSets.add(pinCircle);
+    return onCameraMovePosition;
+  }
+
+  Future<void> _getPinnedAddress()async{
+    _informationLoadCubit.emitLoadingState();
+   await  _mapBloc.getGesturePosition(onCameraMoveEndLatLang!, '');
+
+  }
+  //Future<types.Uint8List>
+  _getMarker() async{
+   types.ByteData byteData = await DefaultAssetBundle.of(context).load('assets/icons/address_delivery_icon.png');
+   picUpMarker = byteData.buffer.asUint8List();
+   isPinMarkerVisible = true;
+   setState((){});
+  /// return byteData.buffer.asUint8List();
+  }
 }
+

@@ -42,11 +42,7 @@ class SharedPreferencesHelper {
     return  _sharedPreferences.getString('sub_area');
   }
 
-  Future<String?> getOrderSource() async {
-    SharedPreferences _sharedPreferences =
-    await SharedPreferences.getInstance();
-    return  _sharedPreferences.getString('sub_area');
-  }
+
   Future<void> removeCurrentSubArea() async {
 
     SharedPreferences _sharedPreferences =

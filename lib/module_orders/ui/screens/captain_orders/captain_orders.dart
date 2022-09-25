@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_kom/consts/colors.dart';
+import 'package:my_kom/consts/utils_const.dart';
 import 'package:my_kom/module_authorization/bloc/is_loggedin_cubit.dart';
 import 'package:my_kom/module_authorization/screens/widgets/login_sheak_alert.dart';
 import 'package:my_kom/module_authorization/screens/widgets/top_snack_bar_widgets.dart';
@@ -208,7 +210,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
             },
             itemBuilder: (context,index){
               return Container(
-                height: 150,
+                height: 180,
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.symmetric(horizontal: 16,vertical: 5),
@@ -249,7 +251,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                     ),
                                     child: Text('${S.of(context)!.orderNumber} : '+orders[index].customerOrderID.toString() ,style: GoogleFonts.lato(
                                         color: ColorsConst.mainColor,
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         letterSpacing: 1,
                                         fontWeight: FontWeight.bold
                                     ),),
@@ -257,14 +259,15 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                 ],
                               ),
                               SizedBox(height: 8,),
-                               Text(orders[index].description,overflow: TextOverflow.ellipsis,style: GoogleFonts.lato(
+                               Text((UtilsConst.lang == 'en')?orders[index].description:orders[index].ar_description,overflow: TextOverflow.ellipsis,maxLines: 2,style: GoogleFonts.lato(
+
                                     fontSize: 12,
 
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w800
                                 ),
                               ),
-                              SizedBox(height: 4,),
+                              SizedBox(height:6,),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -280,9 +283,9 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                   )
 
                                 ],),
-                              SizedBox(height: 4,),
-                              Text(orders[index].orderValue.toString() + '    AED',style: GoogleFonts.lato(
-                                  fontSize: 16,
+                              SizedBox(height: 6,),
+                              Text('${orders[index].orderValue.toString()}  ${UtilsConst.lang == 'en'? 'AED':'د.إ'}',style: GoogleFonts.lato(
+                                  fontSize: 14.0,
                                   color: ColorsConst.mainColor,
                                   fontWeight: FontWeight.bold
                               )),
@@ -294,7 +297,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
 
                       ],
                     ),
-
+                    Spacer(),
                     SizedBox(height: 4,),
                     Container(
                       height: 30,
@@ -318,7 +321,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                 },
                                 child: Text(S.of(context)!.orderDetail, style: TextStyle(
                                     color: ColorsConst.mainColor,
-                                    fontSize: SizeConfig.titleSize * 1.7),),
+                                    fontSize: 14.0),),
 
                               ),
                             ),
@@ -336,7 +339,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                               Navigator.pushNamed(maincontext, OrdersRoutes.ORDER_STATUS_SCREEN,arguments:  orders[index].id);
                               },
                               child: Text(S.of(context)!.trackShipment, style: TextStyle(color: Colors.white,
-                                  fontSize: SizeConfig.titleSize * 1.7),),
+                                  fontSize: 14.0),),
 
                             ),
                           ))
@@ -344,6 +347,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                         ],
                       ),
                     ),
+
                   ],
                 ),
               );
@@ -354,7 +358,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
              child: Container(
                width: 30,
                height: 30,
-               child: CircularProgressIndicator(color: ColorsConst.mainColor,),
+               child: Platform.isIOS?CupertinoActivityIndicator(): CircularProgressIndicator(color: ColorsConst.mainColor,),
              ),
            );
 
@@ -402,7 +406,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                       },
                       itemBuilder: (context,index){
                         return Container(
-                          height: 150,
+                          height: 180,
                           width: double.infinity,
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.symmetric(horizontal: 16,vertical: 5),
@@ -433,7 +437,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                     ),
                                     child: Text('${S.of(context)!.orderNumber} : '+orders[index].customerOrderID.toString() ,style: GoogleFonts.lato(
                                         color: ColorsConst.mainColor,
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         letterSpacing: 1,
                                         fontWeight: FontWeight.bold
                                     ),),
@@ -441,12 +445,16 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                 ],
                               ),
                               SizedBox(height: 8,),
-                              Expanded(
-                                child: Text(orders[index].description,overflow: TextOverflow.ellipsis,style: GoogleFonts.lato(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text((UtilsConst.lang == 'en')?orders[index].description:orders[index].ar_description,overflow: TextOverflow.ellipsis,maxLines: 2,style: GoogleFonts.lato(
+
                                     fontSize: 12,
+
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w800
-                                )),
+                                ),
+                                ),
                               ),
                               SizedBox(height: 4,),
 
@@ -454,24 +462,31 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.location_on_outlined , color: Colors.black45,),
+                                  Icon(Icons.location_on_outlined , color: Colors.black45,size: 12,),
                                   Expanded(
-                                    child: Text(orders[index].addressName,overflow: TextOverflow.ellipsis,style: GoogleFonts.lato(
-                                      fontSize: 12,
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.w800,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                                      child: Text(orders[index].addressName,overflow: TextOverflow.ellipsis,style: GoogleFonts.lato(
+                                        fontSize: 12,
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.w800,
 
-                                    )),
+                                      )),
+                                    ),
                                   )
 
                                 ],),
-                              SizedBox(height: 4,),
-                              Text(orders[index].orderValue.toString() + '    AED',style: GoogleFonts.lato(
-                                  fontSize: 14,
-                                  color: ColorsConst.mainColor,
-                                  fontWeight: FontWeight.bold
-                              )),
-                              SizedBox(height: 4,),
+                              SizedBox(height: 6,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text('${orders[index].orderValue.toString()}  ${UtilsConst.lang == 'en'? 'AED':'د.إ'}' ,style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    color: ColorsConst.mainColor,
+                                    fontWeight: FontWeight.bold
+                                )),
+                              ),
+                              SizedBox(height: 6,),
+                              Spacer(),
                               Container(
                                 height: 30,
                                 child: Row(
@@ -494,7 +509,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                           },
                                           child: Text(S.of(context)!.orderDetail, style: TextStyle(
                                               color: ColorsConst.mainColor,
-                                              fontSize: SizeConfig.titleSize * 1.7),),
+                                              fontSize: 14.0),),
 
                                         ),
                                       ),
@@ -513,7 +528,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                                           _orderBloc.reorder(orders[index].id);
                                         },
                                         child: Text(S.of(context)!.reOrder, style: TextStyle(color: Colors.white,
-                                            fontSize: SizeConfig.titleSize * 1.7),),
+                                            fontSize: 14.0),),
 
                                       ),
                                     )
@@ -532,11 +547,11 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                         listener: (context,state)async{
                           if(state is CreateOrderSuccessState)
                           {
-                            snackBarSuccessWidget(context, 'Order Created Successfully!!');
+                            snackBarSuccessWidget(context,UtilsConst.lang == 'en'? 'Order Created Successfully!!':'تم إرسال الطلب بنجاح');
                           }
                           else if(state is CreateOrderErrorState)
                           {
-                            snackBarSuccessWidget(context, 'The Order Was Not Created!!');
+                            snackBarSuccessWidget(context,UtilsConst.lang == 'en'?  'The Order Was Not Created!!':'حدث خطأ, يرجى المحاولة مجددا');
                           }
                         },
                         builder: (context,state) {
@@ -545,7 +560,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
                           return isLoading? Center(child: Container(
                             width: 30,
                             height: 30,
-                            child: CircularProgressIndicator(),
+                            child:Platform.isIOS?CupertinoActivityIndicator(): CircularProgressIndicator(color: ColorsConst.mainColor,),
                           ),):SizedBox.shrink();
 
                         }
@@ -558,7 +573,7 @@ class CaptainOrdersScreenState extends State<CaptainOrdersScreen> {
               child: Container(
                 width: 40,
                 height: 40,
-                child: CircularProgressIndicator(color: ColorsConst.mainColor,),
+                child:Platform.isIOS ?CupertinoActivityIndicator(): CircularProgressIndicator(color: ColorsConst.mainColor,),
               ),
             );
 

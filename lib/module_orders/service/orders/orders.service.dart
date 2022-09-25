@@ -1,34 +1,25 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
+
 import 'package:my_kom/consts/order_status.dart';
 import 'package:my_kom/consts/payment_method.dart';
-import 'package:my_kom/module_authorization/model/app_user.dart';
 import 'package:my_kom/module_authorization/presistance/auth_prefs_helper.dart';
 import 'package:my_kom/module_company/models/product_model.dart';
-import 'package:my_kom/module_map/models/address_model.dart';
 import 'package:my_kom/module_orders/model/order_model.dart';
 import 'package:my_kom/module_orders/repository/order_repository/order_repository.dart';
-import 'package:my_kom/module_orders/request/accept_order_request/accept_order_request.dart';
 import 'package:my_kom/module_orders/request/order/order_request.dart';
-import 'package:my_kom/module_orders/request/update_order_request/update_order_request.dart';
-import 'package:my_kom/module_orders/response/branch.dart';
 import 'package:my_kom/module_orders/response/order_details/order_details_response.dart';
 import 'package:my_kom/module_orders/response/order_status/order_status_response.dart';
 import 'package:my_kom/module_orders/response/orders/orders_response.dart';
-import 'package:my_kom/module_orders/utils/status_helper/status_helper.dart';
-import 'package:my_kom/module_shoping/service/payment_service.dart';
 import 'package:my_kom/module_shoping/service/purchers_service.dart';
-import 'package:my_kom/module_shoping/service/stripe.dart';
 import 'package:rxdart/rxdart.dart';
-
+import "package:collection/collection.dart";
 class OrdersService {
   //final ProfileService _profileService;
   final  OrderRepository _orderRepository = OrderRepository();
   final AuthPrefsHelper _authPrefsHelper = AuthPrefsHelper();
-  final StripeServices _stripeServices = StripeServices();
- final  PurchaseServices _purchaseServices = PurchaseServices();
+  //final StripeServices _stripeServices = StripeServices();
+ //final  PurchaseServices _purchaseServices = PurchaseServices();
 
   final PublishSubject<Map<String,List<OrderModel>>?> orderPublishSubject =
   new PublishSubject();
@@ -84,9 +75,11 @@ class OrdersService {
     orderModel.payment = response.payment;
     orderModel.orderValue = response.orderValue;
     orderModel.description = response.description;
+    orderModel.ar_description = response.ar_description;
     orderModel.addressName = response.addressName;
     orderModel.destination = response.destination;
     orderModel.phone = response.phone;
+    orderModel.buildingHomeId = response.buildingHomeId;
     orderModel.startDate =DateTime.parse(response.startDate);//DateTime.parse(response.startDate) ;
     orderModel.numberOfMonth = response.numberOfMonth;
     orderModel.deliveryTime = response.deliveryTime;
@@ -122,25 +115,26 @@ class OrdersService {
   Future<OrderModel?> addNewOrder(
       {required List<ProductModel>  products ,required String storeId,required String addressName, required String deliveryTimes,
         required bool orderType , required GeoJson destination, required String phoneNumber,required String paymentMethod,
-        required  double amount , required String? cardId,required int numberOfMonth,required bool reorder,String? description
+        required  double amount , required String? cardId,required int numberOfMonth,required bool reorder,String? description,String? arDescription
         ,required int? customerOrderID,required List<String>? productsIds,
         required String note,
-        required String? orderSource
+        required String? orderSource,
+        required String buildingHomeId
 
       }
       ) async {
 
     String? uId = await _authPrefsHelper.getUserId();
-    String? customername = await _authPrefsHelper.getUsername();
+   // String? customername = await _authPrefsHelper.getUsername();
     DateTime date = DateTime.now();
     // if(paymentMethod == PaymentMethodConst.CREDIT_CARD){
-    //  bool paymentResult =  await PaymentService().paymentByPaypal(amount: amount, displayName: customername!);
+    // //  await PaymentService().processPayment(paymentMethodID: '',amount:  1000.0);
     //
     //  /// An error occurred in the payment process
     //  /// Throw Exception
-    //  if(!paymentResult){
-    //    throw Exception();
-    //  }
+    //  // if(!paymentResult){
+    //  //   throw Exception();
+    //  // }
     // }
 
     late CreateOrderRequest orderRequest;
@@ -151,24 +145,32 @@ class OrdersService {
     int? customer_order_id = await _orderRepository.generateOrderID();
 
     if(!reorder){
+
       Map<ProductModel,int> productsMap = Map<ProductModel,int>();
-      products.forEach((element) {
-        if(!productsMap.containsKey(element)){
-          productsMap[element]= 1;
-        }
-        else{
-          productsMap[element] = productsMap[element]! + 1;
-        }
+
+      // products.forEach((element) {
+      //   if(!productsMap.containsKey(element)){
+      //     productsMap[element]= 1;
+      //   }
+      //   else{
+      //     productsMap[element] = productsMap[element]! + 1;
+      //   }
+      // });
+
+      Map<String , List<ProductModel>> _gruoped_products_list =   groupBy(products, (ProductModel p0) =>p0.id);
+      _gruoped_products_list.forEach((key, value) {
+        productsMap[value.first] = value.length;
       });
 
       List<ProductModel> newproducts = [];
       String description = '';
+      String ar_Desccription ='';
       List<String> products_ides = [];
 
       productsMap.forEach((key, value) {
        key.orderQuantity = value;
-
         description = description + key.orderQuantity.toString() + ' '+ key.title + ' + ';
+       ar_Desccription = ar_Desccription + key.orderQuantity.toString()+ ' '+ key.title2.toString()+' + ';
         newproducts.add(key);
         products_ides.add(key.id);
       });
@@ -194,7 +196,9 @@ class OrdersService {
          customerOrderID:customer_order_id,
          productsIdes: products_ides,
          note: note,
-         orderSource: orderSource
+         orderSource: orderSource,
+         ar_description: ar_Desccription.substring(0 , ar_Desccription.length-2),
+         buildingHomeNumber: buildingHomeId
 
       );
       orderRequest.status = OrderStatus.INIT.name;
@@ -222,12 +226,13 @@ class OrdersService {
         customerOrderID:customer_order_id ,
         productsIdes: productsIds!,
         note: note,
-          orderSource: orderSource
+          orderSource: orderSource,
+      ar_description: arDescription!,
+        buildingHomeNumber: buildingHomeId
 
       );
       orderRequest.status = OrderStatus.INIT.name;
     }
-
     DocumentSnapshot orderSnapShot =await _orderRepository.addNewOrder(orderRequest);
 
     // bool purchaseResponse =  await _purchaseServices.createPurchase(amount: amount, cardId: cardId, userId: uId, orderID: orderSnapShot.id, date: DateTime.now().toIso8601String());
@@ -235,21 +240,21 @@ class OrdersService {
     //   throw Exception();
     // }
 
-     await createpurchase(amount: amount, cardId: cardId!, userId: uId, orderID: orderSnapShot.id, date: DateTime.now());
+    // await createpurchase(amount: amount, cardId: cardId!, userId: uId, orderID: orderSnapShot.id, date: DateTime.now());
     Map<String ,dynamic> map = orderSnapShot.data() as Map<String ,dynamic>;
     map['id'] = orderSnapShot.id;
 
     return OrderModel.mainDetailsFromJson(map);
   }
 
- Future<bool> createpurchase(
-     {required double amount,required String cardId,required String userId,required String orderID,required DateTime date})async{
-   bool purchaseResponse =  await _purchaseServices.createPurchase(amount: amount, cardId: cardId, userId: userId, orderID: orderID, date: DateTime.now().toIso8601String());
-   if(!purchaseResponse){
-     throw Exception();
-   }
-   return true;
-  }
+ // Future<bool> createpurchase(
+ //     {required double amount,required String cardId,required String userId,required String orderID,required DateTime date})async{
+ //   bool purchaseResponse =  await _purchaseServices.createPurchase(amount: amount, cardId: cardId, userId: userId, orderID: orderID, date: DateTime.now().toIso8601String());
+ //   if(!purchaseResponse){
+ //     throw Exception();
+ //   }
+ //   return true;
+ //  }
 
   closeStream(){
     orderPublishSubject.close();
@@ -275,7 +280,9 @@ class OrdersService {
 
       OrderModel? neworder = await addNewOrder(orderSource: order.orderSource, note: order.note, storeId:order.storeId,productsIds: order.productIds,customerOrderID:order.customerOrderID,products: order.products, addressName: order.addressName, deliveryTimes: order.deliveryTime, orderType: order.vipOrder, destination: order.destination, phoneNumber: order.phone, paymentMethod: order.payment, amount: order.orderValue, cardId: order.cardId, numberOfMonth: order.numberOfMonth,
       reorder: true,
-        description: order.description
+        description: order.description,
+        arDescription: order.ar_description,
+        buildingHomeId: order.buildingHomeId
       );
 
       if(neworder !=null)

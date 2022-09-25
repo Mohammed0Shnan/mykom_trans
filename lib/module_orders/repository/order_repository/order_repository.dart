@@ -26,6 +26,7 @@ class OrderRepository {
      DocumentReference document = await _firestore.collection('orders').add(orderRequest.mainDetailsToJson());
      await _firestore.collection('orders').doc(document.id).collection('details').add(orderRequest.moreDetailsToJson());
      DocumentSnapshot d =  await _firestore.collection('orders').doc(document.id).get();
+
      return d;
     }catch(e){
       throw Exception('Error in set data !');
@@ -131,18 +132,34 @@ class OrderRepository {
 
  Future<int?> generateOrderID()async {
     try{
+         var docs = await _firestore.collection('utils').get();
+         DocumentReference _ref =  docs.docs[0].reference;
+      return _firestore.runTransaction( (Transaction transaction) async {
+          DocumentSnapshot _document = await transaction.get(_ref);
 
-     Map<String , dynamic> map =  await _firestore.collection('utils').get().then((value) {
-        return {'doc_id':value.docs[0].id,
-        'order_id':value.docs[0].data()['customer_order_id']
-        };
+            Map _m =_document.data() as Map;
+            Map<String , dynamic> map = {'doc_id':_document.id,
+              'order_id':_m['customer_order_id']
+            };
+
+           await transaction.update(_ref, {
+              'customer_order_id': map['order_id']+1
+            });
+
+           return map['order_id']+1;
+
       });
-
-       await _firestore.collection('utils').doc( map['doc_id']).update({
-       'customer_order_id': map['order_id']+1
-     });
-       int id = map['order_id']+1;
-       return id ;
+     // Map<String , dynamic> map =  await _firestore.collection('utils').get().then((value) {
+     //    return {'doc_id':value.docs[0].id,
+     //    'order_id':value.docs[0].data()['customer_order_id']
+     //    };
+     //  });
+     //
+     //   await _firestore.collection('utils').doc( map['doc_id']).update({
+     //   'customer_order_id': map['order_id']+1
+     // });
+     //   int id = map['order_id']+1;
+     //   return id ;
     }catch(e){
       return null;
     }

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_kom/consts/utils_const.dart';
 import 'package:my_kom/generated/l10n.dart';
 import 'package:my_kom/injecting/components/app.component.dart';
 import 'package:my_kom/module_about/about_module.dart';
@@ -15,6 +16,7 @@ import 'package:my_kom/module_home/navigator_routes.dart';
 import 'package:my_kom/module_localization/service/localization_service/localization_b;oc_service.dart';
 import 'package:my_kom/module_notifications/service/fire_notification_service/fire_notification_service.dart';
 import 'package:my_kom/module_orders/orders_module.dart';
+import 'package:my_kom/module_payment/stripe_payment_service.dart';
 import 'package:my_kom/module_profile/module_profile.dart';
 import 'package:my_kom/module_shoping/shoping_module.dart';
 import 'package:my_kom/module_splash/splash_module.dart';
@@ -24,9 +26,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'module_map/map_module.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+
 Future<void> backgroundHandler(RemoteMessage message)async{
   await Firebase.initializeApp();
-
+  FireNotificationService().display(message.notification!);
 }
 void main() async {
 
@@ -60,7 +63,7 @@ void configLoading() {
     ..userInteractions = true
     ..dismissOnTap = false;
 }
-class MyApp extends StatefulWidget  {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
 
   final LocalizationService _localizationService;
@@ -73,8 +76,10 @@ class MyApp extends StatefulWidget  {
   final ShopingModule _shopingModule;
   final OrdersModule _ordersModule;
   final ProfileModule _profileModule;
+  final FireNotificationService _fireNotificationService;
+  final StripePaymentService _paymentService;
   MyApp(this._localizationService, this._aboutModule,this._splashModule, this._navigatorModule,
-      this._authorizationModule,this._mapModule, this._companyModule,this._shopingModule,this._ordersModule,this._profileModule);
+      this._authorizationModule,this._mapModule, this._companyModule,this._shopingModule,this._ordersModule,this._profileModule,this._fireNotificationService,this._paymentService);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -91,11 +96,10 @@ Timer? _timer;
       }
     });
 
-  FireNotificationService().init(context);
-
+    widget._fireNotificationService.init(context);
     FirebaseMessaging.onMessage.listen((event) {
     if(event.notification != null){
-     FireNotificationService().display(event.notification!);
+     widget._fireNotificationService.display(event.notification!);
     }
 
   });
@@ -146,6 +150,7 @@ void deactivate() {
     return BlocBuilder<LocalizationService, LocalizationState>(
         bloc: widget._localizationService,
         builder: (context, state) {
+          Routes.routes = routes;
           String language;
           if (state is LocalizationArabicState) {
             language = 'ar';

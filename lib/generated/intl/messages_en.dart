@@ -36,7 +36,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordIsRequired": MessageLookupByLibrary.simpleMessage("Password is required"),
 
 
-
     /// Register Page
 
     "createNewAccount": MessageLookupByLibrary.simpleMessage("Create New \n Account"),
@@ -55,6 +54,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "codeIsRequired": MessageLookupByLibrary.simpleMessage("The code is required"),
     "code": MessageLookupByLibrary.simpleMessage("OTP"),
     "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
+    "registerAddressSuccessMessage": MessageLookupByLibrary.simpleMessage("You can change your main address from your profile"),
+    "registerAddressErrorMessage": MessageLookupByLibrary.simpleMessage("Failed to locate your location, please reset it"),
+    "deleteMyAccount": MessageLookupByLibrary.simpleMessage("Delete Account"),
+
+
 
     /// About Pages
     "skip": MessageLookupByLibrary.simpleMessage("Skip"),
@@ -68,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     /// Home Page
     "home": MessageLookupByLibrary.simpleMessage("Home"),
     "orders": MessageLookupByLibrary.simpleMessage("Orders"),
-    "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+    "profile": MessageLookupByLibrary.simpleMessage("Account"),
     "ship": MessageLookupByLibrary.simpleMessage("Cart"),
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "deliveryTo": MessageLookupByLibrary.simpleMessage("Delivery to"),
@@ -77,6 +81,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "notLoggedIN": MessageLookupByLibrary.simpleMessage("You are not subscribed to \n MyKom"),
     "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
     "determineLocation": MessageLookupByLibrary.simpleMessage("Unable to determine the location, specify the location manually!"),
+    "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
+    "companies": MessageLookupByLibrary.simpleMessage("Brands"),
+    "all": MessageLookupByLibrary.simpleMessage("All"),
 
 
     /// Setting Page
@@ -149,7 +156,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailAndPhone": MessageLookupByLibrary.simpleMessage("Email And Phone"),
     "myAddress": MessageLookupByLibrary.simpleMessage("My Address"),
     "myInformation": MessageLookupByLibrary.simpleMessage("My Information"),
-    "myProfile": MessageLookupByLibrary.simpleMessage("My Profile"),
+    "myProfile": MessageLookupByLibrary.simpleMessage("MY Account"),
+    "titleDeleteAccountAlert": MessageLookupByLibrary.simpleMessage("Do you want to delete your account ?"),
+    "subTitleDeleteAccountAlert": MessageLookupByLibrary.simpleMessage("Note: When you delete your account, you will lose your personal data on the MyKom app."),
+
+    "deleteAccountAlertButton": MessageLookupByLibrary.simpleMessage("Delete"),
+    "cancelAccountDeleteAlertButton": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "successDeleteAccount": MessageLookupByLibrary.simpleMessage("The account has been deleted successfully"),
+    "errorDeleteAccount": MessageLookupByLibrary.simpleMessage("An error occurred !"),
 
     /// Orders Page
     "currentOrders": MessageLookupByLibrary.simpleMessage("Current Orders"),
@@ -157,7 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "trackShipment": MessageLookupByLibrary.simpleMessage("Track Shipment"),
     "orderNumber": MessageLookupByLibrary.simpleMessage("Order Number"),
     "orderDetail": MessageLookupByLibrary.simpleMessage("Detail"),
-    "reOrder": MessageLookupByLibrary.simpleMessage("ReOrder"),
+    "reOrder": MessageLookupByLibrary.simpleMessage("Reorder"),
     "noDataToDisplay": MessageLookupByLibrary.simpleMessage("No Data To Display"),
 
     /// Ship Pages
@@ -198,30 +212,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "addCard": MessageLookupByLibrary.simpleMessage("Add Card"),
     "selectCardAlert": MessageLookupByLibrary.simpleMessage("Please select a card "),
 
-    "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete Account"),
-    "titleDeleteAccount": MessageLookupByLibrary.simpleMessage("Do you want to delete your account ?"),
-    "subTitleDeleteAccount": MessageLookupByLibrary.simpleMessage("Note: When you delete your account, you will lose your personal data on the MyKom app."),
-    "successDeleteAccount": MessageLookupByLibrary.simpleMessage("The account has been deleted successfully"),
-    "errorDeleteAccount": MessageLookupByLibrary.simpleMessage("An error occurred !"),
-    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
-    "delete": MessageLookupByLibrary.simpleMessage("Delete"),
-
-
-
     /// Products Pages
 
     "searchForYourProducts": MessageLookupByLibrary.simpleMessage("Search For Your Products"),
     "added": MessageLookupByLibrary.simpleMessage("Add"),
-    "seeTheCart": MessageLookupByLibrary.simpleMessage("See The Cart"),
+    "seeTheCart": MessageLookupByLibrary.simpleMessage("Go To Cart"),
     "addToCart": MessageLookupByLibrary.simpleMessage("Add To Cart"),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
     "selectTheNumberOfItemsRequired": MessageLookupByLibrary.simpleMessage("Select the number of items required"),
     "itemsHaveBeenAdded": MessageLookupByLibrary.simpleMessage("Items have been added"),
-    "rival": MessageLookupByLibrary.simpleMessage("ٌRival"),
+    "rival": MessageLookupByLibrary.simpleMessage("Sale"),
+    "optional": MessageLookupByLibrary.simpleMessage("Optional"),
+    "required": MessageLookupByLibrary.simpleMessage("Required"),
+  "requiredCartFieldMessage": MessageLookupByLibrary.simpleMessage("Please enter the required fields"),
+    "buildingOrHomeNumber": MessageLookupByLibrary.simpleMessage("Building Or Home Number"),
+    "buildingOrHomeNumberHint": MessageLookupByLibrary.simpleMessage("Enter Name or building number or house number"),
 
 
     /// Order Pages
-
     "trackingOrder": MessageLookupByLibrary.simpleMessage("Tracking Order"),
     "orderTrackingNumber": MessageLookupByLibrary.simpleMessage("Order Number"),
     "gotCaption": MessageLookupByLibrary.simpleMessage("Receipt of the request"),
@@ -273,12 +281,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "signedOutSuccessfully": MessageLookupByLibrary.simpleMessage("Signed Out Successfully"),
     "nextTimeBookMark": MessageLookupByLibrary.simpleMessage("Add bookmarks for next time"),
     "cart": MessageLookupByLibrary.simpleMessage("Cart"),
-    "plot": MessageLookupByLibrary.simpleMessage("Plot"),
+    "plot": MessageLookupByLibrary.simpleMessage("pcs"),
     "note": MessageLookupByLibrary.simpleMessage("Note"),
     "noteMessage": MessageLookupByLibrary.simpleMessage("This note will appear at the delivery service provider"),
     "validPhone": MessageLookupByLibrary.simpleMessage("Enter Valid Phone Number"),
     "shortPassword": MessageLookupByLibrary.simpleMessage("The password is short, it must be 5 characters long"),
     "confirmPasswordRequired": MessageLookupByLibrary.simpleMessage("Confirm password is required"),
+    "numberOfItemsRequired": MessageLookupByLibrary.simpleMessage("Select the number of items required"),
 
 
   };

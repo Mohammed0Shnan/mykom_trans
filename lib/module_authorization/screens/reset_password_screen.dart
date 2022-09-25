@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +40,6 @@ class _RestPasswordState extends State<RestPasswordScreen> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return Scaffold(
-
       backgroundColor: Colors.white,
         body: Form(
           key: _resetFormKey,
@@ -58,7 +55,7 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                 ),
                 Row(
                   children: [
-                    IconButton(onPressed: (){ Navigator.pop(context);}, icon:Icon(Platform.isIOS?Icons.arrow_back_ios:Icons.arrow_back,size: 28,))
+                    IconButton(onPressed: (){ Navigator.pop(context);}, icon:Icon(Icons.arrow_back,size: 28,))
                   ],
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.05,),
@@ -68,7 +65,7 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
-                        fontSize: SizeConfig.titleSize * 3)),
+                        fontSize: SizeConfig.titleSize * 5)),
                 SizedBox(height: SizeConfig.screenHeight * 0.05,),
 
                 Container(
@@ -80,7 +77,7 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                     style:  GoogleFonts.lato(
                       fontWeight: FontWeight.w800,
                       color: Colors.black45,
-                      fontSize: SizeConfig.titleSize * 2,
+                      fontSize: SizeConfig.titleSize * 2.5,
                     ),
                   ),
                 ),
@@ -98,31 +95,25 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                               child: Text(S.of(context)!.email,style:GoogleFonts.lato(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black54,
-                                  fontSize: SizeConfig.titleSize * 2
+                                  fontSize: SizeConfig.titleSize * 2.5
                               ))),
                               subtitle: TextFormField(
-
                                 style: TextStyle(fontSize: 20),
                                 keyboardType: TextInputType.emailAddress,
                                 controller: _LoginEmailController,
                                 decoration: InputDecoration(
 
-                                  isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
                                     border:OutlineInputBorder(
                                       borderSide: BorderSide(
                                         width: 2,
                                         style:BorderStyle.solid ,
                                         color: Colors.black87
-                                      ),
-                                        borderRadius: BorderRadius.circular(10)
+                                      )
                                     ),
-
 
                                     hintText: S.of(context)!.email,
                                     hintStyle: TextStyle(color: Colors.black26,fontWeight: FontWeight.w800,fontSize: 13)
                                   //S.of(context).name,
-
                                 ),
                                 textInputAction: TextInputAction.next,
                                 onEditingComplete: () => node.nextFocus(),
@@ -142,7 +133,7 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                         ),
 
                         SizedBox(
-                          height:SizeConfig.heightMulti *2,
+                          height:SizeConfig.heightMulti *3,
                         ),
                         BlocConsumer<RestPasswordBloc, RestPasswordStates>(
                             bloc: widget._restPasswordBloc,
@@ -159,8 +150,8 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                             builder: (context, state) {
                               if (state is LoginLoadingState)
                                 return Container(
-                                    height: 30,
-                                    width: 30,
+                                    height: 40,
+                                    width: 40,
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         color: ColorsConst.mainColor,
@@ -169,16 +160,13 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                               else
                                 return ListTile(
                                   title: Container(
-                                    height:55,
-                                    clipBehavior: Clip.antiAlias,
+                                    height: SizeConfig.heightMulti * 11,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10)),
                                     padding: EdgeInsets.symmetric(vertical: 10),
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                          ),
+
                                           primary:ColorsConst.mainColor,
                                         ),
                                         onPressed: () {
@@ -194,7 +182,7 @@ class _RestPasswordState extends State<RestPasswordScreen> {
                                             style: TextStyle(
                                                 color: Colors.black87,
                                                 fontSize:
-                                                SizeConfig.titleSize * 2.3,
+                                                SizeConfig.titleSize * 3.4,
                                                 fontWeight: FontWeight.w700))),
                                   ),
                                 );

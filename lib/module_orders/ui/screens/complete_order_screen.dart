@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:my_kom/consts/colors.dart';
 import 'package:my_kom/module_home/navigator_routes.dart';
 import 'package:my_kom/module_orders/orders_routes.dart';
@@ -27,17 +26,17 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
             SizedBox(height: SizeConfig.screenHeight * 0.15,),
             Center(
               child: Container(
-                height: SizeConfig.screenHeight * 0.28,
-                width: SizeConfig.screenWidth * 0.5,
+                height: SizeConfig.screenHeight * 0.3,
+                width: SizeConfig.screenWidth * 0.6,
                 child: Image.asset('assets/complete_order.png',fit: BoxFit.contain,),
               ),
             ),
-            Text(S.of(context)!.thankYou,style: TextStyle(fontSize: SizeConfig.titleSize * 3,fontWeight: FontWeight.w800,color: Colors.black54),),
+            Text(S.of(context)!.thankYou,style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.w800,color: Colors.black54),),
             SizedBox(height: 8,),
-            Text(S.of(context)!.orderReceived,style: TextStyle(fontSize: SizeConfig.titleSize * 2,fontWeight: FontWeight.w800,color: Colors.black45)),
+            Text(S.of(context)!.orderReceived,style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w800,color: Colors.black45)),
             Spacer(),
             Container(
-              height: SizeConfig.heightMulti * 4.8,
+              height: 35.0,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: ColorsConst.mainColor,
@@ -48,11 +47,11 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                 onPressed: (){
                   Navigator.pushNamed(context, OrdersRoutes.ORDER_STATUS_SCREEN ,arguments:  widget.orderId);
                 },
-                child: Center(child: Text(S.of(context)!.trackingOrder,style: GoogleFonts.lato(fontWeight: FontWeight.bold,color: Colors.white,fontSize: SizeConfig.titleSize * 2),),),
+                child: Center(child: Text(S.of(context)!.trackingOrder,style: TextStyle(color: Colors.white,fontSize: 16.0),),),
               ),
             ),SizedBox(height:10,),
             Container(
-              height: SizeConfig.heightMulti * 4.8,
+              height: 35.0,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -67,7 +66,7 @@ class _CompleteOrderScreenState extends State<CompleteOrderScreen> {
                 onPressed: (){
                   Navigator.pushNamedAndRemoveUntil(context, NavigatorRoutes.NAVIGATOR_SCREEN,(route)=>false);
                 },
-                child: Center(child: Text(S.of(context)!.goToHome,style: GoogleFonts.lato(fontWeight: FontWeight.bold,color: ColorsConst.mainColor,fontSize: SizeConfig.titleSize * 2),),),
+                child: Center(child: Text(S.of(context)!.goToHome,style: TextStyle(color: ColorsConst.mainColor,fontSize:16.0),),),
               ),
             ),SizedBox(height: 20,),
           ],

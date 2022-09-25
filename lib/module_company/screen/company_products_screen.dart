@@ -56,10 +56,9 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
       });
     }
 
-    return SafeArea(
-      bottom: true,
-      child: Scaffold(
-        body: Container(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
           child: Column(
             children: [
               Row(
@@ -69,7 +68,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                     children: [
                       IconButton(
                           onPressed: () {
-
+                            
                             Navigator.of(context).pop();
                           },
                           icon: Icon(Platform.isIOS
@@ -78,11 +77,11 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                       Hero(
                         tag: 'company' + company.id,
                         child: Container(
-                          height: SizeConfig.imageSize * 10,
-                          width: SizeConfig.imageSize * 10,
+                          height: 35,
+                          width: 35,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-
+                          
                             // child: Image.network( widget.company!.imageUrl,
                             // fit: BoxFit.cover,
                             // )
@@ -114,7 +113,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                         UtilsConst.lang == 'en'?
                      company.name:company.name2,
                         style: TextStyle(
-                            fontSize: SizeConfig.titleSize * 2.3,
+                            fontSize: 19,
                             color: Colors.black54,
                             fontWeight: FontWeight.w500),
                       ),
@@ -127,8 +126,8 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                           margin: EdgeInsets.symmetric(horizontal: 12),
 
                           alignment: Alignment.center,
-                          width:SizeConfig.heightMulti *7,
-                          height: SizeConfig.heightMulti *7,
+                          width:40,
+                          height:40,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white.withOpacity(0.8)
@@ -139,7 +138,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                             animationType: BadgeAnimationType.slide,
                             badgeContent: Text(
                            state is CartLoaded?   state.cart.products.length.toString():'0',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white,fontSize: 11),
                             ),
                             child: IconButton(
                                 icon: Icon(Icons.shopping_cart_outlined,color: Colors.black,),
@@ -163,7 +162,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                 height: 20,
               ),
               Container(
-
+            
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
@@ -173,23 +172,23 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                       BoxShadow(color: Colors.black26, blurRadius: 1)
                     ]),
                 child: SizedBox(
+                  height:  35,
                   child: TextFormField(
-
                     controller: _serachController,
                     style: TextStyle(
-                      height: 1
+                     fontSize: 15
                     ),
                     onChanged: (String query){
-                      productsCompanyBloc.search(query);
+                      productsCompanyBloc.search(query.toUpperCase());
                     },
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 14),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical:6),
                         border: InputBorder.none,
                         prefixIcon: IconButton(
                           icon: Icon(
                             Icons.search,
-                            size: 25,
+                            size: 22,
                             color: Colors.black38,
                           ),
                           onPressed: () {
@@ -197,7 +196,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                           },
                         ),
                         hintText:S.of(context)!.searchForYourProducts,
-                        hintStyle: TextStyle(color: Colors.black26)),
+                        hintStyle: TextStyle(color: Colors.black26,fontSize: 13.5)),
                   ),
                 ),
               ),
@@ -225,74 +224,74 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
             ],
           ),
         ),
-        bottomNavigationBar:  Container(height: 80,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              boxShadow: [BoxShadow(
-                  offset:Offset(0,-3),
-                  color: Colors.black12,
-                  blurRadius: 3
-              )]
+      ),
+      bottomNavigationBar:  Container(height: 75,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            boxShadow: [BoxShadow(
+                offset:Offset(0,-3),
+                color: Colors.black12,
+                blurRadius: 3
+            )]
 
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(height: 2,),
-              FutureBuilder<double?>(
-                  future: _preferencesHelper.getMinimumPurchaseStore(),
-                  builder: (context,AsyncSnapshot<double?> snap){
-                    if(snap.hasData){
-                     return Text('${S.of(context)!.minimumAlert} ${snap.data} AED',style: TextStyle(fontSize: SizeConfig.titleSize * 1.6,fontWeight: FontWeight.w600,color: Colors.black54),);
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(height: 2,),
+            FutureBuilder<double?>(
+                future: _preferencesHelper.getMinimumPurchaseStore(),
+                builder: (context,AsyncSnapshot<double?> snap){
+                  if(snap.hasData){
+                   return Text('${S.of(context)!.minimumAlert}  ${snap.data} ${ UtilsConst.lang == 'en'?'AED':'د.إ'}',style: TextStyle(fontSize:12.5,fontWeight: FontWeight.w600,color: Colors.black54),);
+                  }else{
+                  return Text('${S.of(context)!.minimumAlert}  ${ UtilsConst.lang == 'en'?'AED':'د.إ'} ',style: TextStyle(fontSize:12.5,fontWeight: FontWeight.w600,color: Colors.black54),);
+                  }
+            }),
+            Container(
+              height: 38,
+              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  color: ColorsConst.mainColor,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: MaterialButton(
+                onPressed: (){
+                  widget._authService.isLoggedIn.then((value) {
+                    if(value){
+                      Navigator.pushNamed(context, ShopingRoutes.SHOPE_SCREEN);
+
                     }else{
-                    return Text('${S.of(context)!.minimumAlert} AED',style: TextStyle(fontSize: SizeConfig.titleSize * 1.6,fontWeight: FontWeight.w600,color: Colors.black54),);
+                      loginCheakAlertWidget(context);
                     }
-              }),
-              Container(
-                height: 38,
-                margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    color: ColorsConst.mainColor,
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                child: MaterialButton(
-                  onPressed: (){
-                    widget._authService.isLoggedIn.then((value) {
-                      if(value){
-                        Navigator.pushNamed(context, ShopingRoutes.SHOPE_SCREEN);
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('${S.of(context)!.seeTheCart}',style: TextStyle(color: Colors.white,fontSize: 16.0),),
+                    BlocBuilder<ShopCartBloc,CartState>(
+                        bloc: shopCartBloc,
+                        builder: (context,state) {
+                          if(state is CartLoaded ){
 
-                      }else{
-                        loginCheakAlertWidget(context);
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(S.of(context)!.seeTheCart,style: TextStyle(color: Colors.white,fontSize: SizeConfig.titleSize * 2),),
-                      BlocBuilder<ShopCartBloc,CartState>(
-                          bloc: shopCartBloc,
-                          builder: (context,state) {
-                            if(state is CartLoaded ){
-
-                              return Text(state.cart.totalString,style: TextStyle(color: Colors.white,fontSize: SizeConfig.titleSize * 2));
-                            }
-                            else{
-                              return Text('',style: TextStyle(color: Colors.white,fontSize: SizeConfig.titleSize * 2));
-                            }
-
+                            return Text('${state.cart.totalString}  ${ UtilsConst.lang == 'en'?'AED':'د.إ'}',style: TextStyle(color: Colors.white,fontSize: SizeConfig.titleSize * 2.4));
                           }
-                      )
-                    ],
-                  ),
+                          else{
+                            return Text('',style: TextStyle(color: Colors.white,fontSize: 17.0));
+                          }
+
+                        }
+                    )
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -311,6 +310,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
       );
     } else {
 
+          String _currency = UtilsConst.lang == 'en' ? 'AED':'د.إ';
             return AnimationLimiter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
@@ -321,7 +321,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 15,
                       mainAxisSpacing: 15,
-                      childAspectRatio: 0.85,
+                      childAspectRatio: 0.9,
                       children: List.generate(
                           items.length,
                               (index){
@@ -339,6 +339,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                     },
                                     child: Container(
                                       clipBehavior: Clip.antiAlias,
+
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.circular(10),
@@ -353,13 +354,15 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
+
+                                            /// The image section
                                             AspectRatio(
-                                              aspectRatio:  2,
+                                              aspectRatio:  2.1,
                                               child: Container(
                                                 child: Stack(
                                                   children: [
                                                     Container(
-                                                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.widhtMulti * 5),
+                                                      padding: EdgeInsets.symmetric(horizontal: 20),
                                                       width: double.infinity,
                                                       child: ClipRRect(
                                                         borderRadius:
@@ -416,9 +419,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                                 color: Colors.white,
                                                                 fontWeight:
                                                                 FontWeight.w500,
-                                                                fontSize: SizeConfig
-                                                                    .titleSize *
-                                                                    1.9),
+                                                                fontSize: 15.5),
                                                           ),
                                                         )):Positioned(
                                                         top: 0,
@@ -444,9 +445,7 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                                 color: Colors.white,
                                                                 fontWeight:
                                                                 FontWeight.w500,
-                                                                fontSize: SizeConfig
-                                                                    .titleSize *
-                                                                    1.9),
+                                                                fontSize: 16),
                                                           ),
                                                         ))
                                                         : SizedBox.shrink()
@@ -454,117 +453,117 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 12,),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                                  child: Row(
-                                                    children: [
-                                                      (items[index].old_price !=
-                                                          null)
-                                                          ? Text(
-                                                        items[index]
-                                                            .old_price
-                                                            .toString(),
-                                                        overflow:
-                                                        TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                            decoration:
-                                                            TextDecoration
-                                                                .lineThrough,
-                                                            color: Colors
-                                                                .black26,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w700,
-                                                            fontSize:
-                                                            SizeConfig
-                                                                .titleSize *
-                                                                1.9),
-                                                      )
-                                                          : SizedBox.shrink(),
-                                                      SizedBox(width: 8,),
-                                                      Expanded(
+                                            SizedBox(height: 4,),
+
+                                            /// The price section
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 5),
+                                              child: Row(
+                                                children: [
+                                                  (items[index].old_price !=
+                                                      null)
+                                                      ? Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 6),
                                                         child: Text(
-                                                          items[index]
-                                                              .price
-                                                              .toString(),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                    items[index]
+                                                          .old_price
+                                                          .toString()+ " "+_currency,
+                                                    overflow:
+                                                    TextOverflow
+                                                          .ellipsis,
+                                                    style: TextStyle(
+                                                          decoration:
+                                                          TextDecoration
+                                                              .lineThrough,
+                                                          color: Colors
+                                                              .black26,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .w700,
+                                                          fontSize:11.5),
+                                                  ),
+                                                      )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 8,),
+                                                  Expanded(
+                                                    child: Text(
+                                                      items[index]
+                                                          .price
+                                                          .toString() + " "+_currency ,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                          FontWeight.w700,
+                                                          fontSize: 13.5),
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+
+                                            /// The name section
+                                            AspectRatio(
+                                              aspectRatio: 4.5,
+                                              child: Container(
+                                                // height: 40,
+                                                padding: EdgeInsets.symmetric(horizontal:8),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+
+                                                      child: Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                                        child: Text(
+                                                          UtilsConst.lang == 'en'?
+                                                          items[index].title:
+                                                          items[index].title2,
+
+                                                          maxLines: 2,
                                                           style: TextStyle(
-                                                              color: Colors.green,
+                                                              fontSize: 13,
                                                               fontWeight:
                                                               FontWeight.w700,
-                                                              fontSize: SizeConfig
-                                                                  .titleSize *
-                                                                  2),
+                                                              color: Colors.black54,
+                                                              overflow: TextOverflow
+                                                                  .ellipsis),
                                                         ),
                                                       ),
-
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    Text(
+                                                      items[index]
+                                                          .quantity
+                                                          .toString() +' '+ S.of(context)!.plot,
+                                                      style: TextStyle(
+                                                          color:
+                                                          Colors.black26,
+                                                          fontWeight:
+                                                          FontWeight.w700,
+                                                          fontSize:12),
+                                                    ),
+                                                  ],
                                                 ),
-                                                SizedBox(height: 4,),
-                                                Container(
-                                                  height: SizeConfig.heightMulti * 4,
-                                                  padding: EdgeInsets.symmetric(horizontal:8),
-                                                  child: Row(
-                                                    children: [
-
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.symmetric(horizontal: 5),
-                                                          child: Text(
-                                                            UtilsConst.lang == 'en'?
-                                                            items[index].title:
-                                                            items[index].title2,
-                                                            maxLines: 2,
-                                                            style: TextStyle(
-                                                                fontSize: SizeConfig
-                                                                    .titleSize *
-                                                                    1.5,
-                                                                fontWeight:
-                                                                FontWeight.bold,
-                                                                overflow: TextOverflow
-                                                                    .ellipsis),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        items[index]
-                                                            .quantity
-                                                            .toString() +' '+ S.of(context)!.plot,
-                                                        style: TextStyle(
-                                                            color:
-                                                            Colors.black26,
-                                                            fontWeight:
-                                                            FontWeight.w700,
-                                                            fontSize: SizeConfig
-                                                                .titleSize *
-                                                                1.3),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                              ],
+                                              ),
                                             ),
+                                            ///
                                             SizedBox(
-                                              height: 8,
+                                              height:8,
                                             ),
-                                            Container(
-                                               margin: EdgeInsets.symmetric(horizontal: 4),
-                                               height: SizeConfig.heightMulti *3.8,
-                                               child: Row(
-                                                 mainAxisAlignment:
-                                                 MainAxisAlignment
-                                                     .spaceBetween,
-                                                 children: [
+                                            AspectRatio(
+                                              aspectRatio: 6.5,
+                                              child: Container(
+                                                 margin: EdgeInsets.symmetric(horizontal: 4),
+                                                 // height: 30,
+                                                 child: Row(
+                                                   mainAxisAlignment:
+                                                   MainAxisAlignment
+                                                       .spaceBetween,
+                                                   children: [
 
-                                                   Expanded(
+                                                     Expanded(
+                                                       flex:10,
                                                        child: LayoutBuilder(
                                                          builder: (BuildContext
                                                          context,
@@ -605,23 +604,24 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                                            .mainColor,
                                                                        width: w /
                                                                            3,
-                                                                       child: IconButton(
-                                                                           onPressed: () {
-                                                                             addRemoveBloc.removeOne();
-                                                                           },
-                                                                           icon: Icon(
-                                                                             Icons.remove,
-                                                                             size:
-                                                                             SizeConfig.imageSize * 4,
-                                                                             color:
-                                                                             Colors.white,
-                                                                           )),
+                                                                       child: Center(
+                                                                         child: IconButton(
+                                                                             onPressed: () {
+                                                                               addRemoveBloc.removeOne();
+                                                                             },
+                                                                             icon: Icon(
+                                                                               Icons.remove,
+                                                                               size:15,
+                                                                               color:
+                                                                               Colors.white,
+                                                                             )),
+                                                                       ),
                                                                      ),
                                                                      BlocBuilder<AddRemoveProductQuantityBloc , int>(
                                                                          bloc:addRemoveBloc ,
                                                                          builder: (context,state){
                                                                            return  Container(
-                                                                             child: Text( state.toString(),style: TextStyle(fontWeight: FontWeight.w500,),),
+                                                                             child: Text( state.toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12.0),),
                                                                            );
                                                                          }),
                                                                      Container(
@@ -633,16 +633,20 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                                            .mainColor,
                                                                        child:
                                                                        Center(
-                                                                         child: IconButton(
-                                                                             onPressed: () {
-                                                                               addRemoveBloc.addOne();
+                                                                         child: Center(
+                                                                           child: IconButton(
+                                                                               onPressed: () {
+                                                                                 addRemoveBloc.addOne();
 
-                                                                             },
-                                                                             icon: Icon(
-                                                                               Icons.add,
-                                                                               size: SizeConfig.imageSize * 4,
-                                                                               color: Colors.white,
-                                                                             )),
+                                                                               },
+                                                                               icon: Icon(
+                                                                                 Icons.add,
+
+                                                                                 size:15,
+
+                                                                                 color: Colors.white,
+                                                                               )),
+                                                                         ),
                                                                        ),
                                                                      ),
                                                                    ],
@@ -651,58 +655,60 @@ class _CompanyProductScreenState extends State<CompanyProductScreen> {
                                                              ),
                                                            );
                                                          },
-                                                       )),
-                                                   SizedBox(width: 8,),
-                                                   Container(
-                                                     // height: 10,
-                                                     child: ElevatedButton
-                                                         .icon(
-                                                       onPressed: () {
-                                                         widget._authService.isLoggedIn.then((value) {
-                                                           if(value){
-                                                             if(addRemoveBloc.state == 0){
-
-                                                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                 content:  Text(S.of(context)!.selectTheNumberOfItemsRequired,style: TextStyle(color: Colors.white ,letterSpacing: 1, fontWeight: FontWeight.bold,),),
-                                                                 backgroundColor: Colors.black54,
-                                                                 duration: const Duration(seconds: 1),
-
-                                                               ));
-                                                             }
-                                                             else{
-                                                               shopCartBloc.addProductsToCart(items[index],addRemoveBloc.state).then((value) {
-                                                                 addRemoveBloc.clear();
-                                                               });
-                                                             }
-
-                                                           }else{
-                                                             loginCheakAlertWidget(context);
-                                                           }
-                                                         });
-
-                                                       },
-                                                       label: Text(
-                                                         S.of(context)!.added,
-                                                         style: TextStyle(
-                                                             color: Colors
-                                                                 .white,
-                                                             fontWeight:
-                                                             FontWeight
-                                                                 .w900),
-                                                       ),
-                                                       icon: Icon(
-                                                         Icons
-                                                             .shopping_cart_outlined,
-                                                         size: SizeConfig
-                                                             .imageSize *
-                                                             5,
                                                        ),
                                                      ),
-                                                   ),
-                                                 ],
+                                                     SizedBox(width: 8,),
+                                                     SizedBox(
+                                                       // height: 10,
+
+                                                       child: ElevatedButton
+                                                           .icon(
+
+                                                         onPressed: () {
+                                                           widget._authService.isLoggedIn.then((value) {
+                                                             if(value){
+                                                               if(addRemoveBloc.state == 0){
+
+                                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                   content:  Text(S.of(context)!.selectTheNumberOfItemsRequired,style: TextStyle(color: Colors.white ,letterSpacing: 1, fontWeight: FontWeight.bold,),),
+                                                                   backgroundColor: Colors.black54,
+                                                                   duration: const Duration(seconds: 1),
+
+                                                                 ));
+                                                               }
+                                                               else{
+                                                                 shopCartBloc.addProductsToCart(items[index],addRemoveBloc.state).then((value) {
+                                                                   addRemoveBloc.clear();
+                                                                 });
+                                                               }
+
+                                                             }else{
+                                                               loginCheakAlertWidget(context);
+                                                             }
+                                                           });
+
+                                                         },
+                                                         label: Text(
+                                                           S.of(context)!.added,
+                                                           style: TextStyle(
+                                                               color: Colors
+                                                                   .white,
+                                                               fontSize: 13,
+                                                               fontWeight:
+                                                               FontWeight
+                                                                   .w900),
+                                                         ),
+                                                         icon: Icon(
+                                                           Icons
+                                                               .shopping_cart_outlined,
+                                                           size:16,
+                                                         ),
+                                                       ),
+                                                     ),
+                                                   ],
+                                                 ),
                                                ),
-                                             ),
-                                            SizedBox(height: 8,)
+                                            ),
                                           ],
                                         ),
                                       ),

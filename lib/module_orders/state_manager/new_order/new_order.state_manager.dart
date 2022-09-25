@@ -35,14 +35,16 @@ class NewOrderBloc extends Bloc<CreateOrderEvent,CreateOrderStates> {
   //  //  });
   // }
 
-  void addNewOrder({required String? orderSource,required String note,required String storeId,required List<ProductModel>  product ,required int numberOfMonth,required String addressName, required String deliveryTimes,
+  void addNewOrder({required String orderSource,required String note,required String storeId,required List<ProductModel>  product ,required int numberOfMonth,required String addressName, required String deliveryTimes,
   required bool orderType , required GeoJson destination, required String phoneNumber,required String paymentMethod,
-    required  double orderValue , required String cardId
+    required  double orderValue , required String cardId,
+    required String buildingHomeId
+
   }) {
     this.add(CreateOrderLoadingEvent());
     _service
         .addNewOrder(orderSource:orderSource,note:note, storeId: storeId, productsIds: null,customerOrderID: null, products: product, addressName: addressName,deliveryTimes: deliveryTimes, numberOfMonth: numberOfMonth,orderType: orderType, destination: destination, phoneNumber: phoneNumber, paymentMethod: paymentMethod, amount: orderValue, cardId: cardId,
-    reorder: false,description: null)
+    reorder: false,description: null,arDescription: null,buildingHomeId:buildingHomeId)
         .then((response) {
           if(response != null){
             this.add(CreateOrderSuccessEvent(data: response));

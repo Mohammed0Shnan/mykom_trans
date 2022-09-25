@@ -130,9 +130,9 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
           ),
           Positioned(
-            top: 20,
-            right: 16,
-            left: 16,
+            top: 10,
+            right: 8,
+            left: 8,
             child: Row(
               children: [
                 Spacer(),
@@ -157,7 +157,7 @@ class _AboutScreenState extends State<AboutScreen> {
               ],
             ),),
           Positioned(
-              bottom: 50,
+              bottom: 20,
               left: 0,
               right: 0,
               child:   GestureDetector(
@@ -224,7 +224,7 @@ class Page extends StatelessWidget {
                     Text(
                       infoTitle,
                       style: GoogleFonts.lato(
-                        fontSize: SizeConfig.titleSize * 3.2,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87
 
@@ -239,7 +239,7 @@ class Page extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: GoogleFonts.lato(
 
-                          fontSize: SizeConfig.titleSize * 2.1,
+                          fontSize:16.0,
                           fontWeight: FontWeight.w600,
                           color: Colors.black54
 

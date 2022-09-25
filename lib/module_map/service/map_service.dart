@@ -14,36 +14,45 @@ class MapService {
   // final SharedPreferencesHelper _preferencesHelper = SharedPreferencesHelper();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SharedPreferencesHelper _preferencesHelper =SharedPreferencesHelper();
+
+  Future<void> checkLocationPermission()async{
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Future.error('Location services are disabled');
+      throw('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Future.error('Location permissions are denied');
+        throw('Location permissions are denied');
+
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+      throw( 'Location permissions are permanently denied, we cannot request permissions.');
+
+    }
+  }
+
   Future<MapData> getCurrentLocation() async {
         try {
-          bool serviceEnabled;
-          LocationPermission permission;
-          serviceEnabled = await Geolocator.isLocationServiceEnabled();
-          if (!serviceEnabled) {
-            Future.error('Location services are disabled');
-            throw('Location services are disabled');
-          }
 
-          permission = await Geolocator.checkPermission();
-          if (permission == LocationPermission.denied) {
-            permission = await Geolocator.requestPermission();
-            if (permission == LocationPermission.denied) {
-              Future.error('Location permissions are denied');
-              throw('Location permissions are denied');
+          /// Check Permission
+         await checkLocationPermission();
 
-            }
-          }
-
-          if (permission == LocationPermission.deniedForever) {
-            Future.error(
-                'Location permissions are permanently denied, we cannot request permissions.');
-            throw( 'Location permissions are permanently denied, we cannot request permissions.');
-
-          }
-
+         /// Get Current Location
           Position position = await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high);
 
+          /// Get location information
           LocationInformation s = await getPositionDetail(
               LatLng(position.latitude, position.longitude));
 
@@ -73,14 +82,39 @@ class MapService {
     return address;
   }
 
+
+
+  Future<String> getOrderSource(LatLng latLng)async{
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        latLng.latitude, latLng.longitude,
+        localeIdentifier: 'en');
+
+    Placemark place1 = placemarks[0];
+    String zone ='error';
+    if(place1.locality == ''){
+      if(place1.subLocality ==''){
+        if(place1.subAdministrativeArea ==''){
+          zone = place1.administrativeArea!;
+        }else{
+          zone = place1.subAdministrativeArea!;
+        }
+      }else{
+        zone = place1.subLocality!;
+      }
+    }else{
+      zone=place1.locality!;
+    }
+
+    return zone;
+  }
+
   Future<String> getSubArea(LatLng latLng)async{
     List<Placemark> placemarks = await placemarkFromCoordinates(
         latLng.latitude, latLng.longitude,
         localeIdentifier: UtilsConst.lang);
 
     Placemark place1 = placemarks[0];
-    print(place1);
-    String zone ='';
+    String zone ='error';
     if(place1.locality == ''){
       if(place1.subLocality ==''){
         if(place1.subAdministrativeArea ==''){
@@ -121,8 +155,16 @@ class MapService {
    late String subArea ;
    try{
      if(latLng == null){
-       MapData data =  await getCurrentLocation();
-       subArea = await getSubArea(LatLng(data.latitude,data.longitude));
+         MapData data =  await getCurrentLocation();
+         subArea = await getSubArea(LatLng(data.latitude,data.longitude));
+
+       // /// fetching the registration address area
+       //
+       // else{
+       //   AddressModel? addressModel = await _authPref.getAddress();
+       //   subArea = await getSubArea(LatLng(addressModel!.latitude,addressModel.longitude));
+       // }
+
      }else{
        subArea = await getSubArea(latLng);
      }

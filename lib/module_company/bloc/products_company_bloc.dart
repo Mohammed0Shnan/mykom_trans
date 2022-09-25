@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_kom/consts/utils_const.dart';
 import 'package:my_kom/module_company/models/product_model.dart';
 import 'package:my_kom/module_company/service/company_service.dart';
 import 'package:my_kom/module_shoping/bloc/shopping_cart_bloc.dart';
@@ -77,8 +78,14 @@ class ProductsCompanyBloc extends Bloc<ProductsCompanyEvent, ProductsCompanyStat
 
   List<ProductModel> products =[];
   search(String query){
-    print(query);
-    List<ProductModel> suggestionList = products.where((element) => element.title.startsWith(query)).toList();
+    List<ProductModel> suggestionList=[];
+    if(UtilsConst.lang == 'en'){
+      suggestionList  = products.where((element) => element.title.toUpperCase().startsWith(query)).toList();
+
+    }else{
+      suggestionList = products.where((element) => element.title2.toUpperCase().startsWith(query)).toList();
+
+    }
     this.add(ProductsCompanySuccessEvent(data: suggestionList));
 
   }

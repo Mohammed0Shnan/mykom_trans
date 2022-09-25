@@ -2,58 +2,63 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_kom/module_authorization/requests/login_request.dart';
-import 'package:my_kom/module_authorization/requests/register_request.dart';
+import 'package:my_kom/module_authorization/requests/profile_request.dart';
 import 'package:my_kom/module_authorization/response/login_response.dart';
-import 'package:my_kom/module_profile/request/edit_profile_request.dart';
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String?> register(RegisterRequest request) async {
+  Future<String?> register(String email, String password) async {
     //var user = _firebaseAuth.currentUser;
 
-    String? userId = null;
-    await _firebaseAuth
-        .createUserWithEmailAndPassword(
-      email: request.email,
-      password: request.password,
-    )
-        .then((UserCredential credential) async {
-      User? user = credential.user;
-      userId = user!.uid;
+    try {
+      UserCredential resualt =await _firebaseAuth
+          .createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return resualt.user!.uid;
+    }catch(e){
+      throw e;
+    }
 
-      if (userId != null)
-        await _firestore
-            .collection('users')
-            .doc(userId)
-            .set(request.toJson())
-            .catchError((error) {
-          throw Exception(error.toString());
-        });
-      return await user.getIdToken();
-    }).catchError((error) {
-      throw error;
-    });
+    // String? userId = null;
+    // await _firebaseAuth
+    //     .createUserWithEmailAndPassword(
+    //   email: request.email,
+    //   password: request.password,
+    // );
+    // //     .then((UserCredential credential) async {
+    // //   User? user = credential.user;
+    // //   userId = user!.uid;
+    // //
+    // //   if (userId != null)
+    // //     await _firestore
+    // //         .collection('users')
+    // //         .doc(userId)
+    // //         .set(request.toJson())
+    // //         .catchError((error) {
+    // //       throw Exception(error.toString());
+    // //     });
+    // //   return await user.getIdToken();
+    // // }).catchError((error) {
+    // //   throw error;
+    // // });
 
 
   }
 
   Future<bool> createProfile(ProfileRequest request) async {
     var user = _firebaseAuth.currentUser;
-    var existingProfile =
-        await _firestore.collection('users').doc(user!.uid).get();
-
-    if (!existingProfile.exists) {
-      throw Exception('Profile dosnt exsit !');
+    try{
+      var existingProfile =
+      await _firestore.collection('users').doc(user!.uid).set(request.toJson());
+      return true;
+    }catch(e){
+      throw e;
     }
 
-    existingProfile.reference
-        .update(request.toJson())
-        .then((value) => null)
-        .catchError((error) {
-      throw Exception('Error in set data !');
-    });
 
     // correct exit point
     return true;
@@ -86,6 +91,9 @@ class AuthRepository {
   }
 
   Future<bool>editProfile(String uid, EditProfileRequest request)  async {
+    print('***************************');
+    print(request.toJson());
+
     var existingProfile =
     await _firestore.collection('users').doc(uid).get();
 

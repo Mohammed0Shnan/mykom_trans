@@ -35,9 +35,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStates> {
 
  
 
-  register({required String email,required String password,required UserRole userRole}) async {
+  register({required RegisterRequest request}) async {
     this.add(RegisterLoadingEvent());
-    _service.registerWithEmailAndPassword(email, password ,userRole, AuthSource.EMAIL).then((value) {
+    _service.registerWithEmailAndPassword(request).then((value) {
       if (value.state) {
         this.add(RegisterSuccessEvent(data: value.data));
       } else
@@ -45,15 +45,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStates> {
     });
   }
   
-   createProfile(ProfileRequest request){
-         this.add(CompleteLoadingEvent());
-  _service.createProfile(request).then((value) {
-          if (value.state) {
-        this.add(CompleteSuccessEvent(data: value.data));
-      } else
-        this.add(CompleteErrorEvent(data:value.data));
-  });
- }
+
 
 
 

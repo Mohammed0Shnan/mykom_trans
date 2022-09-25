@@ -1,15 +1,18 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_kom/consts/colors.dart';
 import 'package:my_kom/module_authorization/bloc/is_loggedin_cubit.dart';
-import 'package:my_kom/module_authorization/requests/register_request.dart';
+import 'package:my_kom/module_authorization/requests/profile_request.dart';
 import 'package:my_kom/module_authorization/screens/widgets/login_sheak_alert.dart';
 import 'package:my_kom/module_map/map_routes.dart';
 import 'package:my_kom/module_map/models/address_model.dart';
 import 'package:my_kom/module_orders/ui/widgets/no_data_for_display_widget.dart';
 import 'package:my_kom/module_profile/bloc/profile_bloc.dart';
-import 'package:my_kom/module_profile/request/edit_profile_request.dart';
 import 'package:my_kom/module_profile/screen/widgets/delete_account_aleart.dart';
 import 'package:my_kom/utils/size_configration/size_config.dart';
 import 'package:my_kom/generated/l10n.dart';
@@ -53,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<IsLogginCubit,IsLogginCubitState>(
         bloc: isLogginCubit,
-        listener: (context,state){
+        listener: (ccontext,state){
       if(state ==IsLogginCubitState.LoggedIn)
         {
           if(userId == null){
@@ -63,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }
       if(state == IsLogginCubitState.NotLoggedIn)
-        loginCheakAlertWidget(context);
+        loginCheakAlertWidget(ccontext);
     },
     builder: (context,state){
     if(state == IsLogginCubitState.LoggedIn){
@@ -92,13 +95,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context,state) {
 
                   if(state is ProfileErrorState){
-                    return NoDataForDisplayWidget();
+                    return Center(child: NoDataForDisplayWidget());
                   }
                   else if(state is ProfileSuccessState) {
 
                     return SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 4),
                         child: Column(
                           children: [
                             Row(
@@ -111,11 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       isEditingProfile = !isEditingProfile;
                                       setState((){});
                                     }else{
-                                      request = EditProfileRequest
-                                        (userName: _profileUserNameController.text.trim(), address:
-                                      addressModel
-                                          , phone: _profilePhoneController.text.trim(),
-                                      );
+                                      request = EditProfileRequest();
+                                      request?.userName = _profileUserNameController.text.trim();
+                                      request?.address = addressModel;
+                                      request?.phone = _profilePhoneController.text.trim();
                                       profileBloc.editProfile(request!);
                                     }
 
@@ -129,17 +131,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(height: 5,),
                             Text(S.of(context)!.myProfile,textAlign: TextAlign.center,style: TextStyle(
                                 color: Colors.black54,
-                                fontSize: SizeConfig.titleSize * 2.9,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold
 
 
                             ),),
                             SizedBox(height: 20,),
                             Container(
-                              height: SizeConfig.screenHeight * 0.22,
+                              height: 180.0,
                               child: LayoutBuilder(
                                 builder: (context,constraints){
-                                  double innerHeight  = constraints.maxHeight;
                                   double innerWidth  = constraints.maxWidth;
                                   return Stack(
                                     fit:StackFit.expand,
@@ -150,13 +151,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         bottom: 0,
                                         child: Container(
                                           alignment: Alignment.center,
-                                          height:innerHeight * 0.55,
+                                          height:100.0,
                                           width:innerWidth ,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(color: Colors.black12,
-                                                    blurRadius: 5
+                                                    blurRadius: 2
                                                 )
                                               ],
                                               borderRadius: BorderRadius.circular(30)
@@ -166,23 +167,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             children: [
 
                                               SizedBox(
-                                                height: SizeConfig.heightMulti * 3,
+                                                height: 20,
                                               ),
                                               Center(
                                                 child: TextFormField(
                                                   textAlign: TextAlign.center,
-
+                                                  enabled: (!isEditingProfile)?false:true,
                                                   controller: _profileUserNameController,
 
                                                   style: TextStyle(
 
-                                                      fontSize: SizeConfig.titleSize * 2.1,
+                                                      fontSize: 18,
                                                       fontWeight: FontWeight.bold,
                                                       color: Colors.grey[700]
                                                   ),
 
                                                   decoration: InputDecoration(
-                                                    suffixIcon: (!isEditingProfile)?null:Icon(Icons.edit,color: Colors.black,),
+                                                    suffixIcon: (!isEditingProfile)?null:Icon(Icons.edit,color: Colors.black,size: 18.0,),
                                                     border: InputBorder.none,
                                                     //S.of(context).name,
                                                   ),
@@ -206,13 +207,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               shape: BoxShape.circle,
                                               boxShadow: [
                                                 BoxShadow(color: Colors.black12,
-                                                    blurRadius: 5
+                                                    blurRadius: 2
                                                 )
                                               ],
                                             ),
                                             child: Image.asset('assets/profile.png',
                                               fit: BoxFit.fitWidth,
-                                              width: innerWidth *0.35,
+                                              width: innerWidth * 0.35,
                                             ),
                                           ),
                                         ),
@@ -222,16 +223,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                               ),
                             ),
-                            SizedBox(height: 25,),
+                            SizedBox(height: 20,),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 15),
-                              height: SizeConfig.screenHeight * 0.43,
+                              height: 280.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(color: Colors.black12,
-                                      blurRadius: 5
+                                      blurRadius: 2
                                   )
                                 ],
                               ),
@@ -240,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(height: 20,),
 
                                   Text(S.of(context)!.myInformation,style:  TextStyle(
-                                      fontSize: SizeConfig.titleSize * 2,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey[600]
                                   ),),
@@ -250,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(height: 10,),
 
                                   Container(
-                                    height: SizeConfig.screenHeight *0.14,
+                                    height: 100.0,
                                     padding: EdgeInsets.symmetric(horizontal: 20),
                                     decoration: BoxDecoration(
 
@@ -263,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         SizedBox(height: 8,),
                                         Text(S.of(context)!.myAddress,style:  TextStyle(
-                                            fontSize: SizeConfig.titleSize * 1.7,
+                                            fontSize: 14.0,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[600]
                                         ),),
@@ -280,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   controller: _profileAddressController,
                                                   maxLines: 2,
                                                   style:  TextStyle(
-                                                      fontSize:SizeConfig.titleSize * 1.2,
+                                                      fontSize:11.0,
 
                                                       fontWeight: FontWeight.bold,
                                                       color: Colors.grey[600]
@@ -312,20 +313,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   });
                                                 },
                                                 child: Container(
-                                                  width: SizeConfig.heightMulti * 4,
-                                                  height: SizeConfig.heightMulti * 4,
+                                                  width: 30.0,
+                                                  height: 30.0,
                                                   decoration: BoxDecoration(
                                                       color: ColorsConst.mainColor,
                                                       borderRadius:
                                                       BorderRadius.circular(10)),
                                                   child: Icon(
                                                       Icons.my_location_outlined,
-                                                      size: SizeConfig.heightMulti *
-                                                      2,
+                                                      size: 20.0,
                                                       color: Colors.white),
                                                 ),
                                               )
-
                                           ],
                                         )
                                       ],
@@ -335,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 20),
 
-                                    height: SizeConfig.screenHeight *0.15,
+                                    height: 90.0,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
                                         color: Colors.grey.shade200
@@ -344,7 +343,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.center,                            children: [
                                       Text(S.of(context)!.emailAndPhone,style:  TextStyle(
-                                          fontSize: SizeConfig.titleSize * 1.8,
+                                          fontSize:14.0,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey[600]
                                       ),),
@@ -355,23 +354,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Icon(Icons.email , color: ColorsConst.mainColor,size: 17,),
                                           SizedBox(width: 10,),
                                           Text(state.data.email,style:  TextStyle(
-                                              fontSize: SizeConfig.titleSize * 1.4,
+                                              fontSize: 11.0,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[600]
                                           ),),
+
                                         ],
                                       ),
                                       SizedBox(height: 5,),
+
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(Icons.phone , color: ColorsConst.mainColor,size: 17,),
                                           SizedBox(width: 10,),
                                           Text(state.data.phone,style:  TextStyle(
-                                              fontSize: SizeConfig.titleSize * 1.4,
+                                              fontSize: 11.0,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[600]
                                           ),),
+
+
                                         ],
                                       )
                                     ],
@@ -382,25 +385,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             SizedBox(height: 20,),
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                              height: 45.0,
+                              margin: const EdgeInsets.symmetric(horizontal: 15),
+                              height: 35,
                               width: SizeConfig.screenWidth,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 color: Colors.white,
-                                boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 2)]
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black12,
+                                      blurRadius: 2
+                                  )
+                                ],
                               ),
                               child: MaterialButton(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-
+                                  borderRadius: BorderRadius.circular(20)
                                 ),
-                                onPressed: (){
-                                  deleteAccountAlertWidget(context, profileBloc);
-                                },
-                                child: Center(child: Text(S.of(context)!.deleteAccount,style: GoogleFonts.lato(fontSize: 17,fontWeight: FontWeight.bold,color:Colors.red),),),
-                              ),
-                            )
+                                  onPressed: (){
+                                    deleteAccountAlertWidget(context,profileBloc);
+                                  },
+                                  child: Center(child: Text(S.of(context)!.deleteMyAccount,style: GoogleFonts.lato(fontSize: 14.0,fontWeight: FontWeight.bold,color: Colors.red),))),
+                            ),
+                            SizedBox(height: 50,)
+
                           ],
                         ),
                       ),
@@ -408,10 +415,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   } else
                     return Center(
                       child: Container(
-                        height: 40,
-                        width: 40,
+                        height: 30,
+                        width: 30,
                         child: Center(
-                          child: CircularProgressIndicator(color: ColorsConst.mainColor,),
+                          child:Platform.isIOS?CupertinoActivityIndicator(): CircularProgressIndicator(color: ColorsConst.mainColor,),
                         ),
                       ),
                     );
@@ -428,7 +435,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
         }
-
     );
 
 

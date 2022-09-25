@@ -1,7 +1,7 @@
 // import 'dart:convert';
 //
 // import 'package:dio/dio.dart';
-// import 'package:flutter_braintree/flutter_braintree.dart';
+// // import 'package:flutter_braintree/flutter_braintree.dart';
 // import 'package:stripe_payment/stripe_payment.dart';
 // import 'package:http/http.dart' as http;
 //
@@ -25,7 +25,7 @@
 //   return paymentMethod;
 // }
 //
-// Future<void> processPayment(String paymentMethodID)async{
+// Future<void> processPayment({required String paymentMethodID,required double amount})async{
 //   final _client = Dio(BaseOptions(
 //     sendTimeout: 60000,
 //     receiveTimeout: 60000,
@@ -49,42 +49,42 @@
 // ///
 //
 //
-//  Future<bool> paymentByPaypal({required double amount,required String displayName})async{
-//
-//   try{
-//     var request =   BraintreeDropInRequest(
-//       tokenizationKey: '',
-//       collectDeviceData: true,
-//       paypalRequest: BraintreePayPalRequest(
-//           amount:'$amount',
-//           displayName: displayName,
-//           /// AED
-//           currencyCode:'CVE'
-//       ),
-//       cardEnabled: false,
-//     );
-//     BraintreeDropInResult? result =await BraintreeDropIn.start(request);
-//
-//     if(result != null){
-//       print(result.paymentMethodNonce.description);
-//       print(result.paymentMethodNonce.nonce);
-//       final http.Response response = await http.post(Uri.parse(
-//           '$url?payment_method_nonce=${result.paymentMethodNonce.nonce}&device_data=${result.deviceData}'
-//       ));
-//       final  payResult = jsonDecode(response.body);
-//       if(payResult['result'] == 'success'){
-//         print('payment done');
-//       }
-//
-//       return true;
-//     }else{
-//       return false;
-//     }
-//   }catch(e){
-//     return false;
-//   }
-//
-//
-//   }
+//  // Future<bool> paymentByPaypal({required double amount,required String displayName})async{
+//  //
+//  //  try{
+//  //    var request =   BraintreeDropInRequest(
+//  //      tokenizationKey: '',
+//  //      collectDeviceData: true,
+//  //      paypalRequest: BraintreePayPalRequest(
+//  //          amount:'$amount',
+//  //          displayName: displayName,
+//  //          /// AED
+//  //          currencyCode:'CVE'
+//  //      ),
+//  //      cardEnabled: false,
+//  //    );
+//  //    BraintreeDropInResult? result =await BraintreeDropIn.start(request);
+//  //
+//  //    if(result != null){
+//  //      print(result.paymentMethodNonce.description);
+//  //      print(result.paymentMethodNonce.nonce);
+//  //      final http.Response response = await http.post(Uri.parse(
+//  //          '$url?payment_method_nonce=${result.paymentMethodNonce.nonce}&device_data=${result.deviceData}'
+//  //      ));
+//  //      final  payResult = jsonDecode(response.body);
+//  //      if(payResult['result'] == 'success'){
+//  //        print('payment done');
+//  //      }
+//  //
+//  //      return true;
+//  //    }else{
+//  //      return false;
+//  //    }
+//  //  }catch(e){
+//  //    return false;
+//  //  }
+//  //
+//  //
+//  //  }
 //
 // }

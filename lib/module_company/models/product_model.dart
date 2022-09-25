@@ -44,6 +44,7 @@ class ProductModel {
     map['id'] = this.id;
     map['company_id'] = this.companyId;
     map['title'] = this.title;
+    map['title2'] = this.title2;
     map['description'] = this.description;
     map['price'] = this.price;
     map['old_price'] = this.old_price;

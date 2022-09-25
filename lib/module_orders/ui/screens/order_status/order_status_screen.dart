@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,12 +37,11 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Platform.isIOS? Icons.arrow_back_ios : Icons.arrow_back),
           onPressed: (){
             Navigator.of(context).pop();
           },
         ),
-        centerTitle: false,
         backgroundColor: ColorsConst.mainColor,
         elevation: 0,
         title: Row(
@@ -48,14 +49,14 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: SizeConfig.heightMulti * 5,height: SizeConfig.heightMulti * 3,
+              width: 30,height:30,
               child: Image.asset('assets/map.png',color: Colors.white.withOpacity(0.9),),
             ),
             SizedBox(width: 10,),
             Text(
             S.of(context)!.trackingOrder,
               style: GoogleFonts.lato(
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.bold,
                 color: Colors.white..withOpacity(0.8)
             ),
@@ -131,10 +132,10 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                 children: [
                   Container(
                     color: Colors.black12.withOpacity(0.1),
-                    height: SizeConfig.titleSize * 6,
+                    height: 50,
                     child: Center(child: Text(S.of(context)!.orderTrackingNumber+'  # '+currentOrder.customerOrderID.toString(),
                     style: GoogleFonts.lato(
-                      fontSize: SizeConfig.titleSize  * 2,
+                      fontSize:16.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87
                     ),
@@ -152,7 +153,7 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                           color: Color(0xff989898),
                           indicatorTheme: IndicatorThemeData(
                             position: 0,
-                            size: 19.0,
+                            size: 18.0,
                           ),
                           connectorTheme: ConnectorThemeData(
                             thickness: 2.5,
@@ -162,17 +163,17 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                           indicatorBuilder: (_, index) {
                             if (items[index].isComplete) {
                               return DotIndicator(
-                                size: 19,
+                                size: 18,
                                 color: Color(0xff66c97f),
                               );
                             } else if(items[index].isNext){
                               return DotIndicator(
-                                size: 19,
+                                size: 18,
                                 color: Colors.indigoAccent,
                               );
                             } else{
                               return OutlinedDotIndicator(
-                                size: 19,
+                                size: 18,
                                 borderWidth: 2.5,
                               );
                             }
@@ -181,21 +182,21 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: SizeConfig.widhtMulti * 3),
                                 width: SizeConfig.screenWidth * 0.8,
-                                height: SizeConfig.screenHeight * 0.12,
+                                height: SizeConfig.screenHeight * 0.15,
                                 padding: EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
                                     if(stepNumber == 5)
                                     Container(
-                                      width: SizeConfig.heightMulti * 7,
-                                      height:  SizeConfig.heightMulti *7,
+                                      width: SizeConfig.heightMulti * 8,
+                                      height:  SizeConfig.heightMulti *8,
                                       child:
                                       (index == 2)?Image.asset(icons_dir+items[index].image): SvgPicture.asset(icons_dir+items[index].image)
                                     ),
                                     if(stepNumber == 4)
                                     Container(
-                                      width: SizeConfig.heightMulti * 5,
-                                      height:  SizeConfig.heightMulti *5,
+                                      width: SizeConfig.heightMulti * 6,
+                                      height:  SizeConfig.heightMulti *6,
                                       child:
                                       (index == 2)?
                                       Image.asset(icons_dir+items[index].image):
@@ -211,7 +212,7 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                                         style: GoogleFonts.lato(
                                           color: Colors.black87,
                                           fontWeight: FontWeight.bold,
-                                         fontSize: SizeConfig.titleSize * 2
+                                         fontSize: 16.0
                                         ),
                                         ),
                                         SizedBox(height: 5,),
@@ -220,7 +221,7 @@ class OrderStatusScreenState extends State<OrderStatusScreen> {
                                           style: GoogleFonts.lato(
                                               color: Colors.black45,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: SizeConfig.titleSize * 1.7
+                                              fontSize: 14.5
                                           ),
                                         ),
                                       ],

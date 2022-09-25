@@ -119,74 +119,6 @@ class S {
     );
   }
 
-
-  /// `Delete Account`
-  String get deleteAccount {
-    return Intl.message(
-      'Delete Account',
-      name: 'deleteAccount',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Title delete Account`
-  String get titleDeleteAccount {
-    return Intl.message(
-      'Title delete Account',
-      name: 'titleDeleteAccount',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sub title delete Account`
-  String get subTitleDeleteAccount {
-    return Intl.message(
-      'Sub title delete Account',
-      name: 'subTitleDeleteAccount',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Success delete Account`
-  String get successDeleteAccount {
-    return Intl.message(
-      'Success delete Account',
-      name: 'successDeleteAccount',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Error delete Account`
-  String get errorDeleteAccount {
-    return Intl.message(
-      'Error delete Account',
-      name: 'errorDeleteAccount',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cancel`
-  String get cancel {
-    return Intl.message(
-      'Cancel',
-      name: 'cancel',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Delete`
-  String get delete {
-    return Intl.message(
-      'Delete',
-      name: 'delete',
-      desc: '',
-      args: [],
-    );
-  }
   /// `Email Address is Required`
   String get emailAddressIsRequired {
     return Intl.message(
@@ -586,6 +518,15 @@ class S {
     return Intl.message(
       'Not Logged IN',
       name: 'notLoggedIN',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Number Of Items Required`
+  String get numberOfItemsRequired {
+    return Intl.message(
+      'Number Of Items Required',
+      name: 'numberOfItemsRequired',
       desc: '',
       args: [],
     );
@@ -1308,6 +1249,109 @@ class S {
     );
   }
 
+  /// `Title Delete Account Alert`
+  String get titleDeleteAccountAlert {
+    return Intl.message(
+      'Title Delete Account Alert',
+      name: 'titleDeleteAccountAlert',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Sub Title Delete Account Alert`
+  String get subTitleDeleteAccountAlert {
+    return Intl.message(
+      'Sub Title Delete Account Alert',
+      name: 'subTitleDeleteAccountAlert',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Delete Account Alert Button`
+  String get deleteAccountAlertButton {
+    return Intl.message(
+      'Delete Account Alert Button',
+      name: 'deleteAccountAlertButton',
+      desc: '',
+      args: [],
+    );
+  }  /// `Cancel Account Delete Alert Button`
+  String get cancelAccountDeleteAlertButton {
+    return Intl.message(
+      'Sub Title Delete Account Alert',
+      name: 'cancelAccountDeleteAlertButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optional`
+  String get optional {
+    return Intl.message(
+      'Optional',
+      name: 'optional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required`
+  String get required {
+    return Intl.message(
+      'Required',
+      name: 'required',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Required Cart Field Message`
+  String get requiredCartFieldMessage {
+    return Intl.message(
+      'Required Cart Field Message',
+      name: 'requiredCartFieldMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Building Or Home Number`
+  String get buildingOrHomeNumber {
+    return Intl.message(
+      'Building Or Home Number',
+      name: 'buildingOrHomeNumber',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Building Or Home Number Hint`
+  String get buildingOrHomeNumberHint {
+    return Intl.message(
+      'Building Or Home Number Hint',
+      name: 'buildingOrHomeNumberHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success Delete Account`
+  String get successDeleteAccount {
+    return Intl.message(
+      'Success Delete Account',
+      name: 'successDeleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Error Delete Account`
+  String get errorDeleteAccount {
+    return Intl.message(
+      'Error Delete Account',
+      name: 'errorDeleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Payment Methods`
   String get paymentMethods {
     return Intl.message(
@@ -1327,6 +1371,49 @@ class S {
       args: [],
     );
   }
+
+  /// `Delete My Account `
+  String get deleteMyAccount {
+    return Intl.message(
+      'Delete My Account',
+      name: 'deleteMyAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+
+
+  /// `Companies`
+  String get companies {
+    return Intl.message(
+      'Companies',
+      name: 'companies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get all {
+    return Intl.message(
+      'All',
+      name: 'all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended `
+  String get recommended {
+    return Intl.message(
+      'Recommended',
+      name: 'recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
 
   /// `Credit Card`
   String get creditCard {
@@ -1469,7 +1556,24 @@ class S {
       args: [],
     );
   }
-
+  /// `Register address success message`
+  String get registerAddressSuccessMessage {
+    return Intl.message(
+      'Register address success message',
+      name: 'registerAddressSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
+  /// `Register address error message`
+  String get registerAddressErrorMessage {
+    return Intl.message(
+      'Register address error message',
+      name: 'registerAddressErrorMessage',
+      desc: '',
+      args: [],
+    );
+  }
   /// `Rival`
   String get rival {
     return Intl.message(

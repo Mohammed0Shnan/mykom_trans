@@ -31,22 +31,18 @@ class _PageViewWidgetState extends State<PageViewWidget> {
         currentPage = _pageController.page!;
         setState(() {});
       });
+
     _autoMove();
   }
 
   _autoMove() async {
-    _timer = Timer.periodic(Duration(seconds: 6), (Timer timer) {
-   if(currentPage.round() < widget.itemCount-1){
+    _timer = Timer.periodic(Duration(seconds: 4), (Timer timer) {
+   if(currentPage <widget.itemCount-1){
      currentPage ++;
-     _pageController.animateToPage(currentPage.round(), duration:  Duration(milliseconds: 500), curve: Curves.easeInOut);
-
-   }else {
-     currentPage = 0;
-     _pageController.animateToPage(0, duration:  Duration(milliseconds: 500), curve: Curves.easeInOut);
-
-   }
-
-
+   }else
+   currentPage = 0;
+      _pageController.animateToPage(currentPage.round(), duration:  Duration(milliseconds: 500), curve: Curves.easeInOut);
+      
     });
   }
 

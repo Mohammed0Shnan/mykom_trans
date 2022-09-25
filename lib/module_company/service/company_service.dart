@@ -49,6 +49,7 @@ class CompanyService {
         /// Save Current Store For Check Address Delivery
         ///
         /// Save Store Information
+        ///
          _preferencesHelper.setCurrentSubArea(zone);
        await _getStoreFromZone(storeId);
         print(' store found !!!!!');
@@ -130,11 +131,9 @@ class CompanyService {
 
   }
 
- Future<void> getRecommendedProducts(String? storeId)async {
+ Future<void> getRecommendedProducts(String storeId)async {
      try {
-       if(storeId ==null ){
-         throw Exception();
-       }
+
        await _firestore
            .collection('companies').where('store_id',isEqualTo: storeId)
            .snapshots()

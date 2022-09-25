@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_kom/module_authorization/requests/profile_request.dart';
 import 'package:my_kom/module_authorization/requests/register_request.dart';
 import 'package:my_kom/module_profile/model/profile_model.dart';
-import 'package:my_kom/module_profile/request/edit_profile_request.dart';
 import 'package:my_kom/module_profile/service/profile_service.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileStates> {
@@ -60,7 +60,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileStates> {
   }
 
   Future<bool> deleteMyAccount()async {
-    return _service.deleteMyAccount();
+   return await _service.deleteMyAccount();
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:my_kom/module_authorization/model/app_user.dart';
 import 'package:my_kom/module_authorization/presistance/auth_prefs_helper.dart';
 import 'package:my_kom/module_authorization/repository/auth_repository.dart';
 import 'package:my_kom/module_authorization/requests/login_request.dart';
+import 'package:my_kom/module_authorization/requests/profile_request.dart';
 import 'package:my_kom/module_authorization/requests/register_request.dart';
 import 'package:my_kom/module_authorization/response/login_response.dart';
 import 'package:my_kom/module_authorization/response/register_response.dart';
@@ -31,7 +32,6 @@ class AuthService {
   final PublishSubject<AuthResponse> phoneVerifyPublishSubject =
   new PublishSubject();
 
-
 Future<AppUser>  getCurrentUser()async{
     String? id = await _prefsHelper.getUserId();
     String? email = await _prefsHelper.getEmail();
@@ -44,38 +44,43 @@ Future<AppUser>  getCurrentUser()async{
     return AppUser(id: id!, email: email!, authSource: authSource, userRole: userRole!, address: address!, phone_number: phone_number!, user_name: user_name!,stripeId: strip_id,activeCard: null);
 
 }
-  Future<RegisterResponse> registerWithEmailAndPassword(String email,
-      String password, UserRole role, AuthSource authSource) async {
-    //  DTO
-    RegisterRequest request = RegisterRequest(
-      email: email,
-      password: password,
-      userRole: role,
-    );
+  Future<RegisterResponse> registerWithEmailAndPassword(RegisterRequest request) async {
+
     final bool currentLangIsArabic = UtilsConst.lang == 'ar'?true:false;
 
     try {
-      String? token = await _repository.register(request);
-      // The result may be an error if a private server is connected
+      String? token = await _repository.register(request.email , request.password);
+      /// The result may be an error if a private server is connected
       print('=========== token after register =============');
       print(token);
-      if(token != null)
+      if(token == null)
         return RegisterResponse(data:currentLangIsArabic?'حدث خطأ في عملية التسجيل':'Error in Register', state: false);
 
+      /// after verification email
+      /// DTO
+      ProfileRequest profileRequest = ProfileRequest();
+      profileRequest.email = request.email;
+
+      profileRequest.userRole = request.userRole;
+      profileRequest.address = request.address;
+      profileRequest.userName = request.userName;
+      profileRequest.phone = request.phone;
+
+      await _repository.createProfile(profileRequest);
+      print('************************************sssss');
       return RegisterResponse(data: 'Success !', state: true);
 
     } catch (e) {
       String message ='';
       if (e is FirebaseAuthException) {
         {
-          print('********************');
-          print(e.code);
+
           switch (e.code) {
             case 'email-already-in-use':
               {
                 message =currentLangIsArabic?'البريد الاليكتروني قيد الاستخدام': 'Email Already In Use';
                 Logger()
-                    .info('AuthService', 'Email address $email already in use.');
+                    .info('AuthService', 'Email address ${request.email} already in use.');
                 break;
               }
 
@@ -83,7 +88,7 @@ Future<AppUser>  getCurrentUser()async{
               {
                 message = currentLangIsArabic?'الايميل غير صحيح':'Invalid Email';
 
-                Logger().info('AuthService', 'Email address $email is invalid.');
+                Logger().info('AuthService', 'Email address ${request.email} is invalid.');
                 break;
               }
 
@@ -115,15 +120,15 @@ Future<AppUser>  getCurrentUser()async{
     }
   }
 
-  Future<RegisterResponse> createProfile(ProfileRequest profileRequest) async {
-    final bool currentLangIsArabic = UtilsConst.lang == 'ar'?true:false;
-    try {
-      bool result = await _repository.createProfile(profileRequest);
-      return RegisterResponse(data: currentLangIsArabic?'تم التسجيل بنجاح': 'Success Register !', state: true);
-    } catch (e) {
-      return RegisterResponse(data: e.toString(), state: false);
-    }
-  }
+  // Future<RegisterResponse> createProfile(ProfileRequest profileRequest) async {
+  //   final bool currentLangIsArabic = UtilsConst.lang == 'ar'?true:false;
+  //   try {
+  //     bool result = await _repository.createProfile(profileRequest);
+  //     return RegisterResponse(data: currentLangIsArabic?'تم التسجيل بنجاح': 'Success Register !', state: true);
+  //   } catch (e) {
+  //     return RegisterResponse(data: e.toString(), state: false);
+  //   }
+  // }
 
   Future<AuthResponse> signInWithEmailAndPassword(
     String email,
@@ -289,8 +294,6 @@ Future<AppUser>  getCurrentUser()async{
   }
 
   }
-
-
 
 
 }

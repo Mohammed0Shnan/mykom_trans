@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_kom/generated/l10n.dart';
 import 'package:my_kom/module_authorization/authorization_routes.dart';
 import 'package:my_kom/module_profile/bloc/profile_bloc.dart';
+import 'package:my_kom/generated/l10n.dart';
 
 deleteAccountAlertWidget(context,ProfileBloc bloc){
   // set up the AlertDialog
@@ -13,7 +13,7 @@ deleteAccountAlertWidget(context,ProfileBloc bloc){
         borderRadius: BorderRadius.circular(20)
     ),
     content: Container(
-      height: 190,
+      height:200,
       width: 300,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -25,14 +25,14 @@ deleteAccountAlertWidget(context,ProfileBloc bloc){
 
           SizedBox(height: 25,),
 
-          Center(child: Text(S.of(context)!.titleDeleteAccount,textAlign: TextAlign.center,style: GoogleFonts.lato(
+          Center(child: Text(S.of(context)!.titleDeleteAccountAlert,textAlign: TextAlign.center,style: GoogleFonts.lato(
               fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black87
           ),)),
           SizedBox(height: 8,),
           Center(child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(S.of(context)!.subTitleDeleteAccount,textAlign: TextAlign.center,style: GoogleFonts.lato(
-                fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black54
+            child: Text(S.of(context)!.subTitleDeleteAccountAlert,textAlign: TextAlign.center,style: GoogleFonts.lato(
+                fontSize: 14,fontWeight: FontWeight.bold,color: Colors.black54
             ),),
           )),
           SizedBox(height: 16,),
@@ -45,21 +45,21 @@ deleteAccountAlertWidget(context,ProfileBloc bloc){
                   Navigator.pop(context);
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
+                  borderRadius: BorderRadius.circular(20)
                 ),
                 child:Container(
                     height: 30,
                     width: 80,
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                            color: Colors.black87,
-                            width: 2
-                        )
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.black87,
+                        width: 2
+                      )
                     ),
-                    child: Center(child: Text(S.of(context)!.cancel,style: TextStyle(color: Colors.black87,fontSize:15,fontWeight: FontWeight.bold),))),
+                    child: Center(child: Text(S.of(context)!.cancelAccountDeleteAlertButton,style: TextStyle(color: Colors.black87,fontSize:14.0,fontWeight: FontWeight.bold),))),
 
               ),
               MaterialButton(
@@ -87,13 +87,13 @@ deleteAccountAlertWidget(context,ProfileBloc bloc){
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: Colors.red,
-                          width: 2
+                        color: Colors.red,
+                        width: 2
                       ),
                       color: Colors.white,
 
                     ),
-                    child: Center(child: Text(S.of(context)!.delete,style: TextStyle(color: Colors.red,fontSize:15,fontWeight: FontWeight.bold),))),
+                    child: Center(child: Text(S.of(context)!.deleteAccountAlertButton,style: TextStyle(color: Colors.red,fontSize:14.0,fontWeight: FontWeight.bold),))),
 
               ),
             ],

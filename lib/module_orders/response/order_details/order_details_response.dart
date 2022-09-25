@@ -16,6 +16,8 @@ class OrderDetailResponse {
   late String addressName;
   late double orderValue;
   late String description;
+  late String buildingHomeId;
+  late String ar_description;
   late String payment;
   late String? cardId;
   late OrderStatus status;
@@ -35,10 +37,12 @@ class OrderDetailResponse {
     this.addressName = json['address_name'];
     this.deliveryTime = json['delivery_time'];
     this.description = json['description'];
+    this.ar_description = json['ar_description'] == null?json['description'] :json['ar_description'] ;
     this.numberOfMonth = json['number_of_month'];
     this.orderValue = json['order_value'];
     this.payment = json['payment'];
     this.phone = json['phone'];
+    this.buildingHomeId = json['building_home_id'];
     this.customerOrderID = json['customer_order_id'];
     this.vipOrder = json['vip_order'];
     this.note = json['note'];

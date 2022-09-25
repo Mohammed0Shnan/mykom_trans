@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_kom/module_company/models/product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_kom/module_persistence/sharedpref/shared_preferences_helper.dart';
+import "package:collection/collection.dart";
 
 class ShopCartBloc extends Bloc<CartEvents,CartState> {
   final SharedPreferencesHelper _preferencesHelper = SharedPreferencesHelper();
@@ -15,7 +16,6 @@ class ShopCartBloc extends Bloc<CartEvents,CartState> {
       else if(event is CartAddedEvent){
 
         if(state is CartLoaded){
-          print('add event state');
           emit(CartLoaded(cart: Cart(products: List.from( (state as CartLoaded ).cart.products)..add(event.productModel),minimum_pursh: mimimum_purch,)
           ));
         }
@@ -43,7 +43,6 @@ class ShopCartBloc extends Bloc<CartEvents,CartState> {
   startedShop()async{
    double? res = await _preferencesHelper.getMinimumPurchaseStore();
    print('<<<<<<<<<<<<<<<<<<< started shopping >>>>>>>>>>>>>>>>>>');
-   print(res);
    mimimum_purch = res==null?0.0:res;
     add(CartStartedEvent());
   }
@@ -125,16 +124,23 @@ class Cart extends Equatable {
   final double minimum_pursh ;
   final List<ProductModel>products;
   const Cart({this.products = const <ProductModel>[],this.minimum_pursh =0.0});
+
  Map<ProductModel,int> productQuantity(List<ProductModel> products){
    Map<ProductModel,int> quantityMap = Map<ProductModel,int>();
-   products.forEach((element) {
-     if(!quantityMap.containsKey(element)){
-       quantityMap[element]= 1;
-     }
-     else{
-       quantityMap[element] =    quantityMap[element]! + 1;
-     }
+
+   Map<String , List<ProductModel>> _gruoped_products_list =   groupBy(products, (ProductModel p0) =>p0.id);
+   _gruoped_products_list.forEach((key, value) {
+     quantityMap[value.first] = value.length;
    });
+
+   // _gruoped_list_product.forEach((element) {
+   //   if(!quantityMap.containsKey(element)){
+   //     quantityMap[element]= 1;
+   //   }
+   //   else{
+   //     quantityMap[element] =    quantityMap[element]! + 1;
+   //   }
+   // });
 
 
    return quantityMap;

@@ -15,10 +15,12 @@ class OrderModel {
  late int numberOfMonth;
  late DateTime? startDate;
  late String phone;
+ late String buildingHomeId;
  late GeoJson destination;
  late String addressName;
  late double orderValue;
  late String description;
+ late String ar_description;
  late String payment;
  late OrderStatus status;
  late String? cardId;
@@ -51,6 +53,7 @@ class OrderModel {
    this.id = json['id'];
    this.addressName = json['address_name'];
    this.description = json['description'];
+   this.ar_description = json['ar_description']==null? json['description'] :  json['ar_description'];
    this.orderValue = json['order_value'];
    this.payment = json['payment'];
    this.customerOrderID =json['customer_order_id'];
