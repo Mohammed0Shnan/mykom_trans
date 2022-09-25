@@ -1,0 +1,7 @@
+enum AuthStatus{
+  AUTHORIZED,
+  UNAUTHORIZED,
+  NOT_LOGGED_IN,
+  CODE_SENT,
+  CODE_TIMEOUT
+}

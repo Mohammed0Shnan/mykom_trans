@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+
+class OrderCard extends StatelessWidget {
+ late final String title;
+ final  String subTitle;
+ late final String time;
+ late final bool active;
+
+  OrderCard({
+   required this.time,
+   required this.title,
+    this.subTitle ='',
+   required this.active,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 6,
+      color: active == true ? Theme.of(context).primaryColor : Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        height: 115,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$title',
+                  style: TextStyle(
+                    color: active == true
+                        ? Colors.white
+                        : Theme.of(context).primaryColor,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  '$subTitle $time',
+                  style: TextStyle(
+                    color: active == true
+                        ? Colors.white
+                        : Theme.of(context).primaryColor,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            Center(
+              child: CircleAvatar(
+                backgroundColor: active == true
+                    ? Colors.white
+                    : Theme.of(context).primaryColor,
+                child: Icon(
+                  Icons.arrow_forward,
+                  color: active == true
+                      ? Theme.of(context).primaryColor
+                      : Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
